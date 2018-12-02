@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 15.1.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 width="27px" height="23px" viewBox="0 0 27 23" enable-background="new 0 0 27 23" xml:space="preserve">
+<g id="Flight_Symbol_5_">
+	<linearGradient id="Red_Gradient_2_" gradientUnits="userSpaceOnUse" x1="17.1699" y1="13.0283" x2="17.1699" y2="28.0003">
+		<stop  offset="0" style="stop-color:#EC1C24"/>
+		<stop  offset="0.1457" style="stop-color:#E81B23"/>
+		<stop  offset="0.2966" style="stop-color:#DB1A21"/>
+		<stop  offset="0.45" style="stop-color:#C7181D"/>
+		<stop  offset="0.6051" style="stop-color:#AA1418"/>
+		<stop  offset="0.7601" style="stop-color:#851011"/>
+		<stop  offset="0.81" style="stop-color:#770E0F"/>
+	</linearGradient>
+	<path id="Red_Gradient_1_" fill="url(#Red_Gradient_2_)" d="M13.046,20.873c1.32,2.171,3.429,2.128,3.99,2.128h6.784l-8.004-9.717
+		c-3.692,0.151-5.646,2.52-5.246,3.513L13.046,20.873z"/>
+	<linearGradient id="Beak_Shadow_1_" gradientUnits="userSpaceOnUse" x1="10.3521" y1="14.2734" x2="15.8164" y2="14.2734">
+		<stop  offset="0" style="stop-color:#69231D"/>
+		<stop  offset="0.2323" style="stop-color:#882821"/>
+		<stop  offset="0.5682" style="stop-color:#B02F26"/>
+		<stop  offset="0.8359" style="stop-color:#C83329"/>
+		<stop  offset="1" style="stop-color:#D1342A"/>
+	</linearGradient>
+	<path id="Beak_Shadow_3_" fill="url(#Beak_Shadow_1_)" d="M10.571,16.797c-0.01-0.016-0.219-0.507-0.219-1.099
+		c0-2.219,1.965-3.489,4.201-3.949l1.264,1.535C12.125,13.436,10.17,15.804,10.571,16.797z"/>
+	<linearGradient id="Beak_1_" gradientUnits="userSpaceOnUse" x1="9.752" y1="13.4746" x2="15.841" y2="9.8159">
+		<stop  offset="0.1" style="stop-color:#EFF2F3"/>
+		<stop  offset="0.3294" style="stop-color:#DDE3E5"/>
+		<stop  offset="0.7894" style="stop-color:#ADBBC2"/>
+		<stop  offset="1" style="stop-color:#95A7B0"/>
+	</linearGradient>
+	<path id="Beak_3_" fill="url(#Beak_1_)" d="M13.658,9.585c-3.374,0-5.894,0.556-5.894,1.876c0,0.486,0.152,0.907,0.564,1.649
+		l2.243,3.687c-0.01-0.016-0.219-0.507-0.219-1.099c0-2.219,1.965-3.489,4.201-3.949c0.648-0.134,1.314-0.197,1.965-0.197
+		c0.549,0,1.062,0.028,1.457,0.171C17.741,10.875,17.125,9.585,13.658,9.585z"/>
+	<linearGradient id="Blue_Gradient_1_" gradientUnits="userSpaceOnUse" x1="6.395" y1="10.394" x2="6.395" y2="0.0492">
+		<stop  offset="0" style="stop-color:#1C2F72"/>
+		<stop  offset="0.0456" style="stop-color:#1A397B"/>
+		<stop  offset="0.2567" style="stop-color:#1163A3"/>
+		<stop  offset="0.4627" style="stop-color:#0984C2"/>
+		<stop  offset="0.6593" style="stop-color:#049BD8"/>
+		<stop  offset="0.8428" style="stop-color:#01A9E5"/>
+		<stop  offset="1" style="stop-color:#00AEEA"/>
+	</linearGradient>
+	<path id="Blue_Gradient_2_" fill="url(#Blue_Gradient_1_)" d="M4.781,7.286c0.928,1.521,1.271,1.9,3.479,1.904
+		c1.622,0,4.221,0,4.221,0L6.664,1.842C5.379,0.254,4.64-0.037,3.461-0.061H0.309L4.781,7.286z"/>
+</g>
+</svg>

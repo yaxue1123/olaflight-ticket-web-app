@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<title>Olaflight</title>
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script src="js/moment.js"></script>
+<!-- <link rel="stylesheet" type="text/css" href="style.css"> -->
+</head>
+
+<body>
+    <section class="search-bar">
+        <input id="depart">
+        <input id="arrive">
+        <button id="search">Search flight</button>
+    </section>
+    <section class="all-flight">
+    </section>
+    <script>
+       // Login credentials
+       let root = "http://comp426.cs.unc.edu:3001/";
+       let _depart;
+       let _arrive;
+
+       const credentials = {
+            username: 'yaxue',
+            password: 'yx1123'
+        };
+
+        $('body').on('click', '#search', function() {
+            login(credentials.username, credentials.password).then(function() {
+                // login successfully.
+                // search flight.
+                _depart = $("#depart").val();
+                _arrive = $("#arrive").val();
+                show_search_result(_depart, _arrive);
+            }).fail(function() {
+            });
+        });
+
+        var login = function(username, password) {
+            return $.ajax({
+                url: root + 'sessions',
+                type: 'POST',
+                xhrFields: { withCredentials: true },
+                data: {
+                    user: {
+                    username: username,
+                    password: password,
+                    },
+                }
+            });
+        }
+
+        var show_search_result = function(depart_id, arrive_id) {
+            let body = $("body");
+            console.log(depart_id + ' ' + arrive_id);
+            $.ajax({
+                url: root + 'flights',
+                type: 'GET',
+                xhrFields: { withCredentials: true },
+                success: (response) => {
+                    console.log(response);
+                    // Add filter by depart and arrival.
+                    for (let i = 0; i < response.length; i++) {
+                        if(response[i].departure_id == depart_id && response[i].arrival_id == arrive_id) {
+                            let fdiv = create_one_flight(response[i]);
+                            body.append(fdiv);
+                        }
+                    }
+                }
+            })   
+        }
+
+        var create_one_flight = function(one_flight) {
+            let fdiv = $('<div class="flight" id="' + one_flight.number + '"></div>');
+            // in millisecond.
+            let duration = Math.abs(moment(one_flight.departs_at) - moment(one_flight.arrives_at));
+            let hour = parseInt(duration / 3600000);
+            let minute = Math.round((duration / 3600000 - hour) * 60);
+
+            // duration.
+            fdiv.append('<div>duration: ' + hour +'h' + minute + 'min<div>');
+
+            // airline.
+            $.ajax({
+                url: root + 'airlines',
+                type: 'GET',
+                xhrFields: { withCredentials: true },
+                success: (response) =>  {
+                    search_airline(response, one_flight.airline_id);
+                }
+            })
+
+            var search_airline = function(response, id) {
+                for (let prop in response) {
+                    if (response[prop].id === id) {
+                        fdiv.append('<div>airline id: '  + response[prop].name + '<div>');
+                    }
+                }
+            };
+      
+            // time. 
+            fdiv.append('<div>depart at: ' + (one_flight.departs_at).substring(12, 16) + '<div>');
+            fdiv.append('<div>arrive at: ' + (one_flight.arrives_at).substring(12, 16) + '<div>');
+
+            // flight number.
+            fdiv.append('<div>flight number: ' + one_flight.number + '<div>');
+
+            // airport.
+            $.ajax({
+                url: root + 'airports',
+                type: 'GET',
+                xhrFields: { withCredentials: true },
+                success: (response) =>  {
+                    search_dep_airport(response, one_flight.departure_id);
+                    search_arr_airport(response, one_flight.arrival_id);
+                }
+            });
+
+            var search_dep_airport = function(response, id) {
+                for (let prop in response) {
+                    if (response[prop].id === id) {
+                        fdiv.append('<div>departure airport: ' + response[prop].name + '<div>');
+                    }
+                }
+            };
+
+            var search_arr_airport = function(response, id) {
+                for (let prop in response) {
+                    if (response[prop].id === id) {
+                        fdiv.append('<div>arrival airport: ' + response[prop].name + '<div>');
+                    }
+                }
+            };
+
+            // price.
+            fdiv.append('<div>price: $' + one_flight.info + '<div>');
+                    
+            return fdiv;
+            }
+
+    </script>
+</body>
+
+</html>

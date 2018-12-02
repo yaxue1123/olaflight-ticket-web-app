@@ -1,0 +1,296 @@
+
+<!doctype html>
+
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <!-- JQuery -->
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js" crossorigin="anonymous"></script>
+
+    <title>Database Seed Script</title>
+  </head>
+
+
+  <body>
+    <p id="message" class="text-center mt-4 mb-4">
+      <strong>Ready!</strong>
+    </p>
+
+    <p class="text-center">
+      <button id="login-button" class="btn btn-primary">
+        Log In
+      </button>
+    </p>
+    
+    <p class="text-center">
+      <button id="clear-button" class="btn btn-danger">
+        Clear Database
+      </button>
+    </p>
+
+    <p class="text-center">
+      <button id="start-button" class="btn btn-info">
+        Run Seed Script
+      </button>
+    </p>
+    <script>
+    $(function() {
+        // Login credentials
+        const credentials = {
+            username: 'YOUR USERNAME HERE',
+            password: 'YOUR PASSWORD HERE',
+        };
+        
+        // ################ Airline #####################
+        // required: name. other: code as info.
+        const airlines = [
+            {
+                "name": "American Airline",
+                "logo_url": "image/AA.svg",
+            },
+            {
+                "name": "United Airlines",
+                "logo_url": "image/UA.svg",
+            }, 
+            {
+                "name": "JetBlue",
+                "logo_url": "image/B6.svg",
+            }
+        ];
+
+        // ################ Airport #####################
+        // required: name, code. other: latitude, longtitude, city, state, country as info.
+        const airports =   [
+            {
+            "code": "RDU",
+            "latitude": "35.8729",
+            "longitude": "-78.7923",
+            "name": "Durham International Airport",
+            "city": "Raleigh\/Durham",
+            "state": "North Carolina",
+            "info": "United States"
+        },
+        {
+            "code": "JFK",
+            "latitude": "40.6437",
+            "longitude": "-73.79",
+            "name": "John F Kennedy International Airport",
+            "city": "Jamaica",
+            "state": "New York",
+            "info": "United States"
+        },
+        {
+            "code": "LGA",
+            "latitude": "40.7731",
+            "longitude": "-73.8756",
+            "name": "LaGuardia Airport",
+            "city": "Flushing",
+            "state": "New York",
+            "info": "United States"
+        },
+        {
+            "code": "EWR",
+            "latitude": "40.6924",
+            "longitude": "-74.1843",
+            "name": "Newark International Airport",
+            "city": "Newark",
+            "state": "New Jersey",
+            "info": "United States"
+        }];
+
+        // ################ Plane #####################
+        const planes = [
+            {
+                "name": "Airbus A310",
+                "seatmap_url": "image/United_Airlines_Airbus_A319_V1.svg"
+            }];
+        
+        // Flights
+        const flights;
+        
+        // Instances
+        const instances = [
+            // fill with instances
+        ];
+        
+        
+        // Itineraries
+        const itineraries = [
+            // fill with itineraries
+        ];
+        
+        
+        // Seats
+        const seats = [
+            // fill with seats
+        ];
+        
+        
+        // Tickets
+        const tickets = [
+            // fill with tickets
+        ];
+            
+        /**
+            * Just a simple mapping from pluralized resource names to singular
+            *   resource names.
+            */
+        const singularize = {
+            airlines:    'airline',
+            airports:    'airport',
+            flights:     'flight',
+            instances:   'instance',
+            itineraries: 'itinerary',
+            seats:       'seat',
+            tickets:     'ticket',
+            planes:      'plane',
+        };
+        
+        /**
+            * Logs in to the flights-api server.
+            * 
+            * @param username  The username of your flights-api account
+            * @param password  The password for your flights-api account
+            * @return  Returns a promise object that resolves once you are logged in
+            */
+        function login(username, password) {
+            return $.ajax({
+            url: 'http://comp426.cs.unc.edu:3001/sessions',
+            type: 'POST',
+            data: {
+                user: {
+                username: username,
+                password: password,
+                },
+            },
+            xhrFields: { withCredentials: true },
+            });
+        }
+        
+        
+        /**
+            * Logs out of the flights-api server
+            * 
+            * @return  Returns a promise object that resolves once you are logged out
+            */
+        function logout() {
+            return $.ajax({
+            url: 'http://comp426.cs.unc.edu:3001/sessions',
+            type: 'DELETE',
+            xhrFields: { withCredentials: true },
+            });
+        }
+        
+        
+        /**
+            * Clears the data in your database
+            * 
+            * @return  Returns a promise object that resolves once your data is cleared
+            */
+        function clear() {
+            return $.ajax({
+            url: 'http://comp426.cs.unc.edu:3001/data',
+            type: 'DELETE',
+            xhrFields: { withCredentials: true },
+            });
+        }
+        
+        
+        /**
+            * Makes a series of ajax requests to seed the database with one type of resource
+            * 
+            * @param resourceName  The plural name of the resource as a string
+            * @param dataArray     An array of data objects representing the fields to create
+            * @return Returns a promise object that resolves once all requests have completed
+            */
+        function create(resourceName, dataArray) {
+            let prom = $().promise(); // start with an empty promise
+            dataArray.forEach(function(data) {
+            let wrappedData = {};
+            wrappedData[singularize[resourceName]] = data;
+            prom = prom.then(function() {
+                return $.ajax({
+                url: 'http://comp426.cs.unc.edu:3001/' + resourceName,
+                type: 'POST',
+                data: wrappedData,
+                xhrFields: { withCredentials: true },
+                });
+            });
+            });
+            return prom;
+        }
+        
+        
+        /**
+            * Handle "Log In" button
+            */
+        $('#login-button').click(function() {
+            $('#message').html('<strong class="text-muted">Logging in...</strong>');
+            login(credentials.username, credentials.password).then(function() {
+            $('#message').html('<strong class="text-success">You are now logged in.</strong>');
+            }).fail(function() {
+            $('#message').html('<strong class="text-danger">An error occurred.</strong>');
+            });
+        });
+        
+        
+        /**
+            * Handle "Clear Database" button
+            */
+        $('#clear-button').click(function() {
+            if (confirm('Are you sure you want to clear your entire database?')) {
+            $('#message').html('<strong class="text-muted">Wiping database...</strong>');
+            clear().then(function() {
+                $('#message').html('<strong class="text-success">Your database has been cleared.</strong>');
+            }).fail(function() {
+                $('#message').html('<strong class="text-danger">An error occurred.</strong>');
+            });
+            }
+        });
+        
+        
+        /**
+            * Handle "Run Seed Script" button
+            */
+        let isRunning = false;
+        $('#start-button').click(function() {
+            if (isRunning) {
+            return;
+            }
+            isRunning = true;
+        
+            $('#message').html('<strong class="text-muted">Seeding database...</strong>');
+            $().promise().then(function() {
+            return create('airlines', airlines);
+            }).then(function() {
+            return create('airports', airports);
+            }).then(function() {
+            return create('flights', flights);
+            }).then(function() {
+            return create('instances', instances);
+            }).then(function() {
+            return create('itineraries', itineraries);
+            }).then(function() {
+            return create('seats', seats);
+            }).then(function() {
+            return create('tickets', tickets);
+            }).then(function() {
+            return create('planes', planes);
+            }).then(function() {
+            $('#message').html('<strong class="text-success">Finished!</strong>');
+            }).fail(function() {
+            $('#message').html('<strong class="text-danger">An error occurred.</strong>');
+            }).always(function() {
+            isRunning = false;
+            });
+        });
+        });
+    </script>
+  </body>
+</html>
