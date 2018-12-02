@@ -21,12 +21,14 @@
        let root = "http://comp426.cs.unc.edu:3001/";
        let _depart;
        let _arrive;
+       const date = "2018-12-21";
 
        const credentials = {
             username: 'yaxue',
             password: 'yx1123'
         };
 
+        // ######################## P1 -> P2: search ###########################
         $('body').on('click', '#search', function() {
             login(credentials.username, credentials.password).then(function() {
                 // login successfully.
@@ -37,6 +39,70 @@
             }).fail(function() {
             });
         });
+
+        // ##################### P2 -> P3: select + fill info ##################
+        $('body').on('click', '.select-flight', function(){
+            let flight_id = $(this).attr("id");
+            let body = $('body');
+            // clear body, new page.
+            body.empty();
+
+            // create an instance - flight id + date.
+            $.ajax({
+                url: root + 'instances',
+                type: 'POST',
+                xhrFields: { withCredentials: true },
+                data: {
+                    instance: {
+                    flight_id: flight_id,
+                    date: date,
+                    }
+                }, 
+                success: (response) => {
+                    body.append('instance id: <a id="instance-id">' + response.id + '</a>');
+                    console.log("success create instance!!!");
+                }
+            });
+
+            body.append('Flight id: <div id="flight-id">'+ flight_id + '</div>');
+            // read user input of first name, last name, age, gender, seat.
+            body.append('First name:<input id="first-name"></input><br>');
+            body.append('Last name:<input id="last-name"></input><br>');
+            body.append('Age:<input id="age"></input><br>');
+            body.append('Gender:<input id="gender"></input><br>');
+
+            // TO DO: SVG SEAT MAP CONNECTED WITH DB. !!!!!!!!!!!!!!!!!!!!!!!
+            // TO DO: change to drop down menu.
+            body.append('seat row:<input id="seat-row"></input><br>');
+            body.append('seat number:<input id="seat-number"></input><br>');
+
+            // row and number via user input.
+
+            body.append('<br><button id="order">Order</button>');
+
+        })
+
+        // ###################### P3 -> P4: create ticket #######################
+        $('body').on('click', '#order', function(){
+            let flight_id = $('#flight-id').text();
+
+            // choose seat and create a seat object.
+            // require: plane id, row (1, 2, ...), and number ('A', 'B', ...)
+            // plane id via flight id.
+            $.ajax({
+                url: root + 'flights/?flight_id=' + flight_id,
+                type: 'GET',
+                xhrFields: { withCredentials: true },
+                data: {
+                }, 
+                success: (response) => {
+                    // create a seat object. 
+                    create_seat(response[0].plane_id,   
+                                parseInt($('#seat-row').val()), 
+                                $('#seat-number').val());
+                }
+            });
+        })
 
         var login = function(username, password) {
             return $.ajax({
@@ -54,7 +120,10 @@
 
         var show_search_result = function(depart_id, arrive_id) {
             let body = $("body");
-            console.log(depart_id + ' ' + arrive_id);
+            // remove search history.
+            body.children(".flight").remove();
+
+            // add new history.
             $.ajax({
                 url: root + 'flights',
                 type: 'GET',
@@ -136,10 +205,55 @@
 
             // price.
             fdiv.append('<div>price: $' + one_flight.info + '<div>');
-                    
+            
+            // select button.
+            fdiv.append('<button class="select-flight" id="' + one_flight.id + '">Select</button>');
+
             return fdiv;
             }
 
+        var create_seat = function(plane_id, row, number) {
+            $.ajax({
+                url: root + 'seats',
+                type: 'POST',
+                xhrFields: { withCredentials: true },
+                data: {
+                    seat: {
+                    plane_id: plane_id,
+                    row: row,
+                    number: number
+                    }
+                }, 
+                success: (response) => {
+                    $('body').append('seat id: <div id="seat-id">' + response.id + '</div>');
+                    console.log("success create seat!!!");
+                    create_ticket();
+                }
+            });
+        }
+
+        var create_ticket = function() {
+            // create a ticket. 
+            // must wait seat create success!!!!!!!!!!!!!! use callback.
+            $.ajax({
+                url: root + 'tickets',
+                type: 'POST',
+                xhrFields: { withCredentials: true },
+                data: {
+                    ticket: {
+                    first_name: $('#first-name').val(),
+                    last_name: $('#last-name').val(),
+                    age: parseInt($('#age').val()),
+                    gender: $('#gender').val(),
+                    seat_id: 13106,
+                    instance_id: parseInt($('#instance-id').text())
+                    }
+                }, 
+                success: () => {
+                    console.log("success create ticket!!!");
+                }
+            });
+        }
     </script>
 </body>
 
