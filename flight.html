@@ -44,8 +44,20 @@
         $('body').on('click', '.select-flight', function(){
             let flight_id = $(this).attr("id");
             let body = $('body');
+
             // clear body, new page.
             body.empty();
+
+            // show selected flight info.
+            $.ajax({
+                url: root + 'flights/' + flight_id,
+                type: 'GET',
+                xhrFields: { withCredentials: true },
+                success: (response) => {
+                    let flight_info = show_one_flight(response, "one");
+                    body.append(flight_info);
+                }
+            });
 
             // create an instance - flight id + date.
             $.ajax({
@@ -90,14 +102,12 @@
             // require: plane id, row (1, 2, ...), and number ('A', 'B', ...)
             // plane id via flight id.
             $.ajax({
-                url: root + 'flights/?flight_id=' + flight_id,
+                url: root + 'flights/' + flight_id,
                 type: 'GET',
                 xhrFields: { withCredentials: true },
-                data: {
-                }, 
                 success: (response) => {
                     // create a seat object. 
-                    create_seat(response[0].plane_id,   
+                    create_seat(response.plane_id,   
                                 parseInt($('#seat-row').val()), 
                                 $('#seat-number').val());
                 }
@@ -107,6 +117,20 @@
         // ###################### P4: view ticket ##############################
         $('body').on('click', '.view-ticket', function(){
             console.log($(this).attr("id"));
+            let ticket_id = parseInt($(this).attr("id"));
+            let body = $('body');
+
+            // clear body, new page.
+            body.empty();
+
+            $.ajax({
+                url: root + 'tickets/' + ticket_id,
+                type: 'GET',
+                xhrFields: { withCredentials: true }, 
+                success: (response) => {
+                    show_ticket(response);
+                }
+            });
             
         })
 
@@ -135,11 +159,10 @@
                 type: 'GET',
                 xhrFields: { withCredentials: true },
                 success: (response) => {
-                    console.log(response);
                     // Add filter by depart and arrival.
                     for (let i = 0; i < response.length; i++) {
                         if(response[i].departure_id == depart_id && response[i].arrival_id == arrive_id) {
-                            let fdiv = show_one_flight(response[i]);
+                            let fdiv = show_one_flight(response[i], "all");
                             body.append(fdiv);
                         }
                     }
@@ -147,7 +170,8 @@
             })   
         }
 
-        var show_one_flight = function(one_flight) {
+        // input: a flight object.
+        var show_one_flight = function(one_flight, num) {
             let fdiv = $('<div class="flight" id="' + one_flight.number + '"></div>');
             // in millisecond.
             let duration = Math.abs(moment(one_flight.departs_at) - moment(one_flight.arrives_at));
@@ -210,10 +234,12 @@
             };
 
             // price.
-            fdiv.append('<div>price: $' + one_flight.info + '<div>');
+            fdiv.append('price: $<div id="price">' + one_flight.info + '<div>');
             
             // select button.
-            fdiv.append('<button class="select-flight" id="' + one_flight.id + '">Select</button>');
+            if (num === "all") {
+                fdiv.append('<button class="select-flight" id="' + one_flight.id + '">Select</button>');
+            }
 
             return fdiv;
             }
@@ -251,10 +277,12 @@
                     age: parseInt($('#age').val()),
                     gender: $('#gender').val(),
                     seat_id: response.id,
-                    instance_id: parseInt($('#instance-id').text())
+                    instance_id: parseInt($('#instance-id').text()),
+                    is_purchased: true,
+                    price_paid: parseFloat($('#price').text())
                     }
                 }, 
-                success: () => {
+                success: (response) => {
                     console.log("success create ticket!!!");
                     $('body').append('<div>Thank you for your order!</div>');
                     $('body').append('<button class="view-ticket" id="' + response.id + '">View ticket</button>');
@@ -262,8 +290,43 @@
             });
         }
     
-        var show_ticket = function() {
-
+        var show_ticket = function(one_ticket) {
+            let body = $('body');
+            body.append('First name: <div id="t-first-name">' + one_ticket.first_name + '</div>');
+            body.append('Last name: <div id="t-last-name">' + one_ticket.last_name + '</div>');
+            body.append('Age: <div id="t-age">' + one_ticket.age+ '</div>');
+            body.append('Gender: <div id="t-gender">' + one_ticket.gender + '</div>');
+            // seat info via seat id.
+            $.ajax({
+                url: root + 'seats/' + one_ticket.seat_id,
+                type: 'GET',
+                xhrFields: { withCredentials: true },
+                success: (response) =>  {
+                    body.append('Seat row: <div id="t-seat">' + response.row + '</div>');
+                    body.append('Seat number: <div id="t-seat">' + response.number + '</div>');
+                }
+            });
+     
+            // date and flight info via instance.
+            $.ajax({
+                url: root + 'instances/' + one_ticket.instance_id,
+                type: 'GET',
+                xhrFields: { withCredentials: true },
+                success: (response) =>  {
+                    // date.
+                    body.append('Date: <div id="t-seat">' + response.date + '</div>');
+                    // flight info.
+                    $.ajax({
+                        url: root + 'flights/' + response.flight_id,
+                        type: 'GET',
+                        xhrFields: { withCredentials: true },
+                        success: (response) =>  {
+                            let flight_info = show_one_flight(response, "one");
+                            body.append(flight_info);
+                        }
+                    });
+                }
+            });
         }
     </script>
 </body>
