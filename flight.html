@@ -82,7 +82,7 @@
 
         })
 
-        // ###################### P3 -> P4: create ticket #######################
+        // ###################### P3: create ticket ############################
         $('body').on('click', '#order', function(){
             let flight_id = $('#flight-id').text();
 
@@ -102,6 +102,12 @@
                                 $('#seat-number').val());
                 }
             });
+        })
+
+        // ###################### P4: view ticket ##############################
+        $('body').on('click', '.view-ticket', function(){
+            console.log($(this).attr("id"));
+            
         })
 
         var login = function(username, password) {
@@ -133,7 +139,7 @@
                     // Add filter by depart and arrival.
                     for (let i = 0; i < response.length; i++) {
                         if(response[i].departure_id == depart_id && response[i].arrival_id == arrive_id) {
-                            let fdiv = create_one_flight(response[i]);
+                            let fdiv = show_one_flight(response[i]);
                             body.append(fdiv);
                         }
                     }
@@ -141,7 +147,7 @@
             })   
         }
 
-        var create_one_flight = function(one_flight) {
+        var show_one_flight = function(one_flight) {
             let fdiv = $('<div class="flight" id="' + one_flight.number + '"></div>');
             // in millisecond.
             let duration = Math.abs(moment(one_flight.departs_at) - moment(one_flight.arrives_at));
@@ -225,16 +231,15 @@
                     }
                 }, 
                 success: (response) => {
-                    $('body').append('seat id: <div id="seat-id">' + response.id + '</div>');
                     console.log("success create seat!!!");
-                    create_ticket();
+                    create_ticket(response);
                 }
             });
         }
 
-        var create_ticket = function() {
+        var create_ticket = function(response) {
             // create a ticket. 
-            // must wait seat create success!!!!!!!!!!!!!! use callback.
+            // must wait seat create success.
             $.ajax({
                 url: root + 'tickets',
                 type: 'POST',
@@ -245,14 +250,20 @@
                     last_name: $('#last-name').val(),
                     age: parseInt($('#age').val()),
                     gender: $('#gender').val(),
-                    seat_id: 13106,
+                    seat_id: response.id,
                     instance_id: parseInt($('#instance-id').text())
                     }
                 }, 
                 success: () => {
                     console.log("success create ticket!!!");
+                    $('body').append('<div>Thank you for your order!</div>');
+                    $('body').append('<button class="view-ticket" id="' + response.id + '">View ticket</button>');
                 }
             });
+        }
+    
+        var show_ticket = function() {
+
         }
     </script>
 </body>
