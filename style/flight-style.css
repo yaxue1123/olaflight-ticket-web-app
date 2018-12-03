@@ -1,19 +1,26 @@
+body, html {
+  height: 100%;
+}
+
 body {
   margin: 0px;
   font-family: 'Lucida Grande';
 }
 
 #hp {
-  background: url('hp-bg.png');
+  background: url('../image/hp-bg.png');
+  height: 100%;
+  background-position: center;
   background-repeat: no-repeat;
-  background-size: 100%;
+  background-size: cover;
   color: #FFFFFF;
 }
 
 #banner {
-  background: url('sub-banner.png');
+  background: url('../image/sub-banner.png');
   background-repeat: no-repeat;
-  background-size: 100%;
+  height: 100%;
+  background-size: cover;
   color: #FFFFFF;
 }
 
@@ -49,6 +56,7 @@ body {
 
 button {
   border: none;
+  cursor: pointer;
 }
 
 #view_trip {
@@ -91,6 +99,8 @@ button {
   width: 25%;
   border-bottom: 1.5px solid #CE7444;
   color: #FFFFFF;
+  outline: none;
+  cursor: pointer;
 }
 
 .group input {
