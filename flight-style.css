@@ -1,0 +1,218 @@
+body {
+  margin: 0px;
+  font-family: 'Lucida Grande';
+}
+
+#hp {
+  background: url('hp-bg.png');
+  background-repeat: no-repeat;
+  background-size: 100%;
+  color: #FFFFFF;
+}
+
+#banner {
+  background: url('sub-banner.png');
+  background-repeat: no-repeat;
+  background-size: 100%;
+  color: #FFFFFF;
+}
+
+.title_div {
+  grid-area: head;
+}
+
+.content_div {
+  grid-area: cont;
+}
+
+.search_div {
+  grid-area: serc;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  background-color: #D2D2D2;
+  padding: 8px;
+}
+
+/* Grid layout for MedalBoard & AtheleteBoard page */
+.grid {
+  display: grid;
+  grid-gap: 0px;
+  grid-template-columns: repeat(10, 1fr);
+  text-align: left;
+  grid-template-areas:
+    "head head head head head head head head head head"
+    "serc serc serc serc serc serc serc serc serc serc"
+    "sidL cont cont cont cont cont cont cont cont sidR";
+}
+
+button {
+  border: none;
+}
+
+#view_trip {
+  margin-left: 85%;
+  background-color: transparent;
+  color: #FFFFFF;
+  font-size: 17px;
+  margin-bottom: 150px;
+  margin-top: 30px;
+  font-family: athelas, serif;
+  font-style: normal;
+}
+
+.wrap {
+  margin: 30px;
+  margin-left: 25%;
+}
+
+.wrap>* {
+  text-align: left;
+  font-family: Menlo, monospace;
+  font-size: 25px;
+}
+
+.search-btn {
+  margin-left: 75%;
+  font-size: 16px;
+  margin-top: 20px;
+  padding: 12px 5px;
+  background-color: #CE7444;
+  color: white;
+  font-family: Menlo, monospace;
+  padding: 10px;
+}
+
+.wrap input, .group input {
+  border: none;
+  background-color: transparent;
+  margin-left: 10px;
+  width: 25%;
+  border-bottom: 1.5px solid #CE7444;
+  color: #FFFFFF;
+}
+
+.group input {
+  width: 30%;
+  color: #3F3F3F;
+  text-align: center;
+  font-size: 15px;
+}
+
+select {
+  font-family: Menlo, monospace;
+  font-size: 25px;
+  margin-left: 5px;
+  margin-right: 5px;
+  border: 2px solid #CE7444;
+  border-radius: 0px;
+  color: #FFFFFF;
+  background-color: Transparent;
+  -webkit-appearance: menulist;
+}
+
+#arrive, #depart {
+  font-size: 18px;
+}
+
+#sub {
+  background-color: #F1F1F1;
+}
+
+#sub #view_trip {
+  margin-bottom: 50px;
+}
+
+.group>* {
+  text-align: left;
+  font-family: Menlo, monospace;
+  font-size: 15px;
+  color: #3f3f3f;
+}
+
+#sub-search {
+  margin: 0px;
+  font-size: 12px;
+  border-radius: 3px;
+}
+
+.sort_feature {
+  text-align: center;
+  font-family: Menlo, monospace;
+}
+
+.sort_feature>button {
+  border: 0px;
+  border-radius: 3px;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  margin: 10px;
+  font-size: 15px;
+  font-family: inherit;
+  color: #3f3f3f;
+  background-color: #d2d2d2;
+}
+
+/* set the flight info style */
+.aireline_img {
+  grid-area: img;
+}
+
+.flight_info {
+  grid-area: fit;
+  display: grid;
+  grid-template-columns: auto auto auto;
+}
+
+.flight-wrap {
+  grid-column: 1 / 3;
+}
+
+.price {
+  grid-area: prc;
+  font-size: 20px;
+}
+
+.checkouy {
+  grid-area: chk;
+}
+
+.flight {
+  display: grid;
+  grid-gap: 0px;
+  grid-template-columns: repeat(10, 1fr);
+  text-align: left;
+  grid-template-areas:
+    "img fit fit fit fit fit fit fit prc chk";
+  align-items: center;
+  background: #FFFFFF;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.50);
+  padding: 15px;
+  margin-bottom: 15px;
+  color:#3f3f3f;
+}
+
+.flight span {
+  margin: 10px;
+}
+
+.airline_name {
+  font-size: 20px;
+}
+
+.time_scope {
+  font-size: 30px;
+}
+
+.checkout {
+  font-size: 16px;
+  padding: 12px 0px;
+  background-color: #5C70A7;
+  color: white;
+  font-family: Menlo, monospace;
+}
+
+.airport_info {
+  margin-top: 10%;
+}
