@@ -99,8 +99,6 @@ button {
   width: 25%;
   border-bottom: 1.5px solid #CE7444;
   color: #FFFFFF;
-  outline: none;
-  cursor: pointer;
 }
 
 .group input {
@@ -225,4 +223,9 @@ select {
 
 .airport_info {
   margin-top: 10%;
+}
+
+input, select {
+  outline: none;
+  cursor: pointer;
 }

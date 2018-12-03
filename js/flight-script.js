@@ -1,5 +1,4 @@
 let root_url = "http://comp426.cs.unc.edu:3001/";
-const date = "2018-12-21";
 const credentials = {
   username: 'yaxue',
   password: 'yx1123'
@@ -25,6 +24,7 @@ $(document).ready(() => {
 
   // ##################### P2 -> P3: select + fill info ##################
   $('body').on('click', '.checkout', function () {
+    let record = get_search_input();
     let flight_id = $(this).attr("id");
     let body = $('body');
 
@@ -41,8 +41,6 @@ $(document).ready(() => {
       }
     });
 
-    console.log($("#datepicker").datepicker('getDate'));
-
     // create an instance - flight id + date.
     $.ajax({
       url: root_url + 'instances',
@@ -51,7 +49,7 @@ $(document).ready(() => {
       data: {
         instance: {
           flight_id: flight_id,
-          date: date,
+          date: record['date']
         }
       },
       success: (response) => {
