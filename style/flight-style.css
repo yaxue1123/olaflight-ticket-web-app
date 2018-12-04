@@ -16,16 +16,20 @@ body {
   color: #FFFFFF;
 }
 
-#banner {
-  background: url('../image/sub-banner.png');
-  background-repeat: no-repeat;
-  height: 100%;
-  background-size: cover;
-  color: #FFFFFF;
+#sub-banner {
+  width: 100%;
+}
+
+#first-wrap {
+  margin-top: 70px;
 }
 
 .title_div {
   grid-area: head;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
 }
 
 .content_div {
@@ -59,15 +63,20 @@ button {
   cursor: pointer;
 }
 
+#title-img {
+  margin-top: 30px;
+  width: 15%;
+}
+
 #view_trip {
-  margin-left: 85%;
+  margin-left: 42%;
   background-color: transparent;
   color: #FFFFFF;
   font-size: 17px;
   margin-bottom: 150px;
-  margin-top: 30px;
   font-family: athelas, serif;
   font-style: normal;
+  position: fixed;
 }
 
 .wrap {
@@ -198,7 +207,7 @@ select {
   box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.50);
   padding: 15px;
   margin-bottom: 15px;
-  color:#3f3f3f;
+  color: #3f3f3f;
 }
 
 .flight span {
