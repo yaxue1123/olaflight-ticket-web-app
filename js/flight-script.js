@@ -115,6 +115,14 @@ $(document).ready(() => {
     });
   });
 
+  // ###################### P2: sort ##############################
+  $('body').on('click', '.sort', function () {
+    let info = {};
+    info.depart_id = $("#depart").attr("airport-id");
+    info.arrive_id = $("#arrive").attr("airport-id");
+    show_search_result(info, $(this).attr("id"));
+  });
+
 });
 
 var show_one_flight = function (one_flight, input) {
@@ -190,23 +198,27 @@ var show_one_flight = function (one_flight, input) {
     function search_airline(response, id) {
       for (let prop in response) {
         if (response[prop].id === id) {
-          c_div.children(".flight_info").children(".flight-wrap").append('<span class = "airline_name">' + response[prop].name + '</span>');
-          c_div.children(".flight_info").children(".flight-wrap").append('<span class = "flight_number">' + one_flight.number + '</span></br>')
-            .append('<span class = "time_scope">' + (one_flight.departs_at).substring(12, 16) + ' - ' + (one_flight.arrives_at).substring(12, 16) + '</span>')
+          c_div.children(".flight_info").children(".flight-wrap")
+            .append('<span class = "airline_name">' + response[prop].name + '</span>');
+          c_div.children(".flight_info").children(".flight-wrap")
+            .append('<span class = "flight_number">' + one_flight.number + '</span></br>')
+            .append('<span class = "time_scope">' +
+              moment(one_flight.departs_at).format('LT') + ' - ' +
+              moment(one_flight.arrives_at).format('LT') + '</span>')
             .append('<span class = "duration">' + hour + 'h' + minute + 'min</span>');
         }
       }
     }
   }
-
 }
 
-var show_search_result = function (info) {
-
+// show all results based on deaprture/ arrival airport.
+// additional criterial: sort by price or duration.
+var show_search_result = function (info, sort) {
+  $(".flight").remove();
   let div_to_append = $(".content_div");
   let depart_id = info['depart_id'];
   let arrive_id = info['arrive_id'];
-
   $.ajax({
     url: root_url + 'flights',
     type: 'GET',
@@ -214,14 +226,31 @@ var show_search_result = function (info) {
       withCredentials: true
     },
     success: (response) => {
-      // Add filter by depart and arrival.
+      // array of flight object.
+      let all_flights = [];
+      // get all results by depart id and arrival id (airport).
       for (let i = 0; i < response.length; i++) {
-
         if (response[i].departure_id == parseInt(depart_id)
           && response[i].arrival_id == parseInt(arrive_id)) {
-          let fdiv = show_one_flight(response[i], "all");
-          div_to_append.append(fdiv);
+          all_flights.push(response[i]);
         }
+      }
+
+      // from low to high. less money/ shorter duration.
+      if (sort === "sort-price") {
+        all_flights.sort((a,b) => (parseInt(a.info) > parseInt(b.info)) ? 1 : -1);
+      } else if (sort === "sort-duration") {
+        all_flights.sort(function(a, b) {
+          let duration_a = Math.abs(moment(a.departs_at) - moment(a.arrives_at));
+          let duration_b = Math.abs(moment(b.departs_at) - moment(b.arrives_at));
+          return duration_a > duration_b ? 1 : -1;
+        });
+      }
+
+      // append all flights.
+      for (let i = 0; i < all_flights.length; i++) {
+        let fdiv = show_one_flight(all_flights[i], "all");
+        div_to_append.append(fdiv);
       }
     }
   });
@@ -240,14 +269,16 @@ var set_result_page = function (input) {
   airport_compelete();
   let d_input = input['depart_text'].split(",")[0];
   let a_input = input['arrive_text'].split(",")[0];
-  $("#depart").val(d_input).css("font-size", "15px").css("color", "#3f3f3f");
-  $("#arrive").val(a_input).css("font-size", "15px").css("color", "#3f3f3f");
+  $("#depart").val(d_input).css("font-size", "15px").css("color", "#3f3f3f").attr("airport-id", input.depart_id);
+  $("#arrive").val(a_input).css("font-size", "15px").css("color", "#3f3f3f").attr("airport-id", input.arrive_id);
 
   //add sort function
-  $(".content_div").append('<div class = "sort_feature"><space>sort by&nbsp&nbsp</space><button class = "sort_price">Price</button><button class = "sort_duration">Duration</button></div>');
+  $(".content_div")
+    .append('<div class = "sort_feature"><space>sort by&nbsp&nbsp</space>' +
+      '<button class="sort" id="sort-price">Price</button><button class="sort" id="sort-duration">Duration</button></div>');
 
   //call to get search result
-  show_search_result(input);
+  show_search_result(input, "no sort");
 }
 
 var get_search_input = function () {
@@ -358,34 +389,34 @@ var show_ticket = function (one_ticket) {
   body.append('Gender: <div id="t-gender">' + one_ticket.gender + '</div>');
   // seat info via seat id.
   $.ajax({
-      url: root_url + 'seats/' + one_ticket.seat_id,
-      type: 'GET',
-      xhrFields: { withCredentials: true },
-      success: (response) => {
-          body.append('Seat row: <div id="t-seat">' + response.row + '</div>');
-          body.append('Seat number: <div id="t-seat">' + response.number + '</div>');
-      }
+    url: root_url + 'seats/' + one_ticket.seat_id,
+    type: 'GET',
+    xhrFields: { withCredentials: true },
+    success: (response) => {
+      body.append('Seat row: <div id="t-seat">' + response.row + '</div>');
+      body.append('Seat number: <div id="t-seat">' + response.number + '</div>');
+    }
   });
 
   // date and flight info via instance.
   $.ajax({
-      url: root_url + 'instances/' + one_ticket.instance_id,
-      type: 'GET',
-      xhrFields: { withCredentials: true },
-      success: (response) => {
-          // date.
-          body.append('Date: <div id="t-seat">' + response.date + '</div>');
-          // flight info.
-          $.ajax({
-              url: root_url + 'flights/' + response.flight_id,
-              type: 'GET',
-              xhrFields: { withCredentials: true },
-              success: (response) => {
-                  let flight_info = show_one_flight(response, "one");
-                  body.append(flight_info);
-              }
-          });
-      }
+    url: root_url + 'instances/' + one_ticket.instance_id,
+    type: 'GET',
+    xhrFields: { withCredentials: true },
+    success: (response) => {
+      // date.
+      body.append('Date: <div id="t-seat">' + response.date + '</div>');
+      // flight info.
+      $.ajax({
+        url: root_url + 'flights/' + response.flight_id,
+        type: 'GET',
+        xhrFields: { withCredentials: true },
+        success: (response) => {
+          let flight_info = show_one_flight(response, "one");
+          body.append(flight_info);
+        }
+      });
+    }
   });
 }
 

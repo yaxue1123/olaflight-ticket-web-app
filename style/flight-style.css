@@ -225,7 +225,7 @@ select {
   margin-top: 10%;
 }
 
-input, select {
+input, select, button {
   outline: none;
   cursor: pointer;
 }
