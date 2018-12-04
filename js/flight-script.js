@@ -202,7 +202,7 @@ $(document).ready(() => {
         withCredentials: true
       },
       success: (tickets) => {
-        for (prop in tickets) {
+        for (let prop in tickets) {
           if (tickets[prop].user_id === user_id) {
             body.append("ticket number: " + tickets[prop].id);
             body.append(show_ticket(tickets[prop]));
@@ -570,7 +570,7 @@ var show_ticket = function (one_ticket) {
               withCredentials: true
             },
             success: (airline) => {
-              for (prop in airline) {
+              for (let prop in airline) {
                 if (flight.airline_id === airline[prop].id) {
                   t_airline.append(airline[prop].name);
                   t_logo.append('<img src="' + airline[prop].logo_url + '">');
@@ -636,3 +636,5 @@ var calculate_duration = function (departs_at, arrives_at) {
 
   return hour + 'h' + minute + 'min';
 }
+
+
