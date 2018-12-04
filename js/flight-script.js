@@ -14,7 +14,6 @@ $(document).ready(() => {
   //listen to the click button
   $('body').on('click', '.search-btn', function () {
     let record = get_search_input();
-    console.log(record)
     //remove the current div
     $(".title_div").children("#sub-banner").remove();
     $(".search_div").remove();
@@ -39,11 +38,6 @@ $(document).ready(() => {
     div_to_change.empty().attr("id", "select_seat");
     $('.search_div').empty()
       .toggleClass("show_ticket");
-
-
-
-
-
 
     // show selected flight info.
     $.ajax({
@@ -73,9 +67,10 @@ $(document).ready(() => {
           date: record['date']
         }
       },
-      success: (response) => {
-        customer_container.append('<br><button class="order" id = ' + response.id + '>Order</button>');
-        // customer_container.append('instance id: <a id="instance-id">' + response.id + '</a>');
+      success: (instance) => {
+        customer_container.append('<br><button class="order" id = ' + instance.id + '>Order</button>');
+        // ! Important: please don't delete!!! style already as display none.
+        $('body').append('<a id="instance-id">' + instance.id + '</a>');
         console.log("success create instance!!!");
       }
     });
@@ -106,16 +101,15 @@ $(document).ready(() => {
     customer_container.append('<span>first name</span><input id="first-name"></input><br>');
     customer_container.append('<span>last name</span><input id="last-name"></input><br>');
     customer_container.append('<span>age</span><input id="age"></input><br>');
-    customer_container.append('<span>gender</span><select id = "gender-options"><option value="male">Male</option><option value="female">Female</option></select><br>');
+    customer_container.append('<span>gender</span><select id = "gender-options"><option value="M">Male</option><option value="F">Female</option></select><br>');
     customer_container.append('<span>seat</span><input id="seat-row" readonly="readonly"></input><input id="seat-number" readonly="readonly" ></input><br>');
 
     //listen to the seat selecting
-    $('body').on('click', '.seatChart-seat', function(e) {
+    $('body').on('click', '.seatChart-seat', function (e) {
       //clear the previous clicking
-      $('.seatChart-container .seatChart-seat').each(function() {
+      $('.seatChart-container .seatChart-seat').each(function () {
         if ($(this).hasClass("clicked") && !$(this).hasClass("legend-style")) {
           if ($(this)[0].innerHTML != e.currentTarget.innerHTML) {
-            console.log("NOoooo");
             $(this).removeClass("clicked")
               .css("background-color", "#7189c0");
           }
@@ -126,7 +120,7 @@ $(document).ready(() => {
       customer_container.children("#seat-number").val('');
       let seat_row = e.currentTarget.innerHTML[0];
       let seat_number = e.currentTarget.innerHTML[1];
-      console.log(seat_row, seat_number);
+      // console.log(seat_row, seat_number);
       customer_container.children("#seat-row").val(seat_row);
       customer_container.children("#seat-number").val(seat_number);
     });
@@ -134,7 +128,7 @@ $(document).ready(() => {
   });
 
   // ###################### P3: create ticket ############################
-  $('body').on('click', '.order', function() {
+  $('body').on('click', '.order', function () {
     let flight_id = $('.flight-id').attr("id");
 
     // choose seat and create a seat object.
@@ -160,25 +154,28 @@ $(document).ready(() => {
     let ticket_id = parseInt($(this).attr("id"));
     let body = $('body');
 
-    // clear body, new page.
-    body.empty();
-    body.append($('<div class="ticket-container"><div>'));
-
-    $.ajax({
-      url: root_url + 'tickets/' + ticket_id,
-      type: 'GET',
-      xhrFields: {
-        withCredentials: true
-      },
-      success: (response) => {
-        $('.ticket-container').append(show_ticket(response));
-        $('.ticket-container').append('<button id="tickect-to-search">Back to home</button>');
-      }
-    });
+     // clear body, new page.
+     $('.search_div').remove();
+     $('.content_div').empty();
+ 
+     $('.content_div').append($('<div class="ticket-container"><div>'));
+ 
+     $.ajax({
+       url: root_url + 'tickets/' + ticket_id,
+       type: 'GET',
+       xhrFields: {
+         withCredentials: true
+       },
+       success: (response) => {
+         $('.ticket-container').append(show_ticket(response));
+         $('.ticket-container').append('<button id="tickect-to-search">Back to home</button>');
+       }
+     });
+     
   });
 
   // ###################### P4 - P1: back to home #######################
-  $('body').on('click', '#tickect-to-search', function () { 
+  $('body').on('click', '#tickect-to-search', function () {
     // TO DO. Don't reload and rerender.
     location.reload();
   });
@@ -193,7 +190,7 @@ $(document).ready(() => {
 
 });
 
-var show_seat = function() {
+var show_seat = function () {
   // ###################### Try: show seat ##############################
   let map = {
     rows: 9,
@@ -209,12 +206,12 @@ var show_seat = function() {
     type: "regular",
     color: "#d46d36",
     price: ""
-  }, ];
+  },];
 
   return [map, types];
 }
 
-var show_one_flight = function(one_flight, input) {
+var show_one_flight = function (one_flight, input) {
   let c_div;
   let flight_info = {};
   if (input === "all") {
@@ -370,7 +367,6 @@ var set_result_page = function (input) {
   $(".search_div").append('<button class="search-btn" id = "sub-search">Search</button>');
   //set default value
   datepicker_voke();
-  console.log(input['date']);
   $("#datepicker").datepicker('setDate', input['date'])
     .css("width", "50%");
   airport_compelete();
@@ -477,17 +473,18 @@ var create_ticket = function (response) {
         first_name: $('#first-name').val(),
         last_name: $('#last-name').val(),
         age: parseInt($('#age').val()),
-        gender: $('#gender').val(),
+        gender: $('#gender-options').children('option:selected').val(),
         seat_id: response.id,
         instance_id: parseInt($('#instance-id').text()),
         is_purchased: true,
-        price_paid: parseFloat($('#price').text())
+        price_paid: parseFloat($('.price').text())
       }
     },
-    success: (response) => {
+    success: (ticket) => {
       console.log("success create ticket!!!");
-      $('body').append('<div>Thank you for your order!</div>');
-      $('body').append('<button class="view-ticket" id="' + response.id + '">View ticket</button>');
+      $('.order').remove();
+      $('.customer_container').append('<div id="order-msg">Thank you for the order.</div>');
+      $('.customer_container').append('<button class="view-ticket" id="' + ticket.id + '">View order</button>');
     }
   });
 }
