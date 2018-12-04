@@ -4,6 +4,8 @@ const credentials = {
   password: 'yx1123'
 };
 
+const user_id = 134;
+
 $(document).ready(() => {
 
   datepicker_voke();
@@ -171,7 +173,7 @@ $(document).ready(() => {
          $('.ticket-container').append('<button id="tickect-to-search">Back to home</button>');
        }
      });
-     
+
   });
 
   // ###################### P4 - P1: back to home #######################
@@ -188,10 +190,35 @@ $(document).ready(() => {
     show_search_result(info, $(this).attr("id"));
   });
 
+  // ###################### Every page: view trip ##############################
+  $('body').on('click', '#view_trip', function () { 
+    let body = $('body');
+    body.empty();
+
+    $.ajax({
+      url: root_url + 'tickets/',
+      type: 'GET',
+      xhrFields: {
+        withCredentials: true
+      },
+      success: (tickets) => {
+        for (prop in tickets) {
+          if (tickets[prop].user_id === user_id) {
+            body.append("ticket number: " + tickets[prop].id);
+            body.append(show_ticket(tickets[prop]));
+          }
+        }
+        // $('.ticket-container').append(show_ticket(response));
+        // $('.ticket-container').append('<button id="tickect-to-search">Back to home</button>');
+      }
+    });
+  });
+
 });
 
 var show_seat = function () {
-  // ###################### Try: show seat ##############################
+  // ###################### P3: show seat. ##############################
+  // ###################### SO FAR STATIC. ##############################
   let map = {
     rows: 9,
     cols: 9,
