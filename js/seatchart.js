@@ -1199,7 +1199,6 @@ function SeatchartJS(seatMap, seatTypes) { // eslint-disable-line no-unused-vars
       for (var i = 0; i < seatMap[type].length; i += 1) {
         var index = seatMap[type][i];
         var id = '{0}_{1}'.format(Math.floor(index / cols),index % cols);
-        console.log("id",id);
         var seat = document.getElementById(id);
 
         // prevents from null reference exception when json goes out of range
@@ -1335,7 +1334,7 @@ function SeatchartJS(seatMap, seatTypes) { // eslint-disable-line no-unused-vars
     seatMapContainer.appendChild(createColumnsIndex());
 
     // add rows containing seats
-    console.log('seatMaprows',seatMap.rows);
+    // console.log('seatMaprows',seatMap.rows);
     for (var i = 0; i < seatMap.rows; i += 1) {
       var rowIndex = alphabet[i];
       var row = createRow(rowIndex);
@@ -1382,7 +1381,7 @@ function SeatchartJS(seatMap, seatTypes) { // eslint-disable-line no-unused-vars
       for (var m = 0; m < seatMap.disabledRows.length; m += 1) {
         var disabledRow = seatMap.disabledRows[m];
         for (var c = 0; c < seatMap.cols; c += 1) {
-          console.log("cols", c);
+          // console.log("cols", c);
           seatMap.disabled.push((seatMap.cols * disabledRow) + c);
         }
       }

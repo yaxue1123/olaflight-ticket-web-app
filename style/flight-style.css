@@ -137,8 +137,10 @@ select {
   background-color: #F1F1F1;
 }
 
-#sub #view_trip {
+#view_trip {
   margin-bottom: 50px;
+  border: 1px solid #FFF;
+  border-radius: 3px;
 }
 
 .group>* {
@@ -259,10 +261,11 @@ input, select, button {
   align-items: center;
   height: 100%;
   width: 100%;
-  background: url('../image/hp-bg.png');
+  padding-top: 5em;
+  /* background: url('../image/hp-bg.png');
   background-position: center;
   background-repeat: no-repeat;
-  background-size: cover;
+  background-size: cover; */
 }
 
 .ticket {
@@ -282,7 +285,7 @@ input, select, button {
   color: #3f3f3f;
   line-height: 150%;
   height: 20em;
-  width: 60%;
+  width: 70%;
 }
 
 .ticket-airline, .ticket-flight, .ticket-duration, 
@@ -290,24 +293,24 @@ input, select, button {
   font-family: 'VT323';
   align-self: center;
   justify-self: center;
-  font-size: 1.5em;
+  font-size: 2em;
 }
 
 .ticket-airline {
   grid-area: airline;
-  font-size: 3em;
+  font-size: 3.5em;
   justify-self: start;
 }
 
 .ticket-price {
   grid-area: price;
-  font-size: 2em;
+  font-size: 2.5em;
   font-weight: bold;
 }
 
 .ticket-flight {
   grid-area: flight; 
-  font-size: 2em;
+  font-size: 2.5em;
   line-height: 150%; 
   justify-self: start;
 }
@@ -337,13 +340,12 @@ input, select, button {
 }
 
 
+/***************************************************************/
+/**************** style for customer page *******************/
+/***************************************************************/
 /* .map_container{
   grid-area: map;
 }
-
-
-
-
 
 .flight_container{
   grid-area: fit;
@@ -361,9 +363,16 @@ input, select, button {
   padding-top: 30px;
   margin-left: 30px;
   width: 250px;
+  height: 450px;
   font-size: 15px;
   color: #3f3f3f;
   background-color: #d5d5d5;
+}
+
+#order-msg {
+  margin-top: 3em;
+  padding-left: 2em;
+  font-weight: bold;
 }
 
 .customer_container>input {
@@ -417,7 +426,22 @@ input, select, button {
   border-radius: 3px;
 }
 
+.view-ticket {
+  margin: 20%;
+  padding: 8px 30px;
+  font-size: 15px;
+  margin-right: 20%;
+  font-family: Menlo, monospace;
+  background-color: #809bd4;
+  border-radius: 3px;
+}
+
 .show_ticket{
   background-color:Transparent;
   padding:0;
+}
+
+/***** hide instance id ******/
+#instance-id {
+  display: none;
 }
