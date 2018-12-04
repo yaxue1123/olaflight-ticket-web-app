@@ -195,7 +195,7 @@ select {
   grid-area: chk;
 }
 
-.flight {
+.flight, .a-flight {
   display: grid;
   grid-gap: 0px;
   grid-template-columns: repeat(10, 1fr);
@@ -208,6 +208,10 @@ select {
   padding: 15px;
   margin-bottom: 15px;
   color: #3f3f3f;
+}
+
+.a-flight {
+  width: 80%
 }
 
 .flight span {
@@ -237,4 +241,89 @@ select {
 input, select {
   outline: none;
   cursor: pointer;
+}
+
+/* .map_container{
+  grid-area: map;
+}
+
+
+
+
+
+.flight_container{
+  grid-area: fit;
+} */
+#select_seat {
+  display: flex;
+  justify-content: center;
+}
+
+/* .containers {
+  margin-right: 50px;
+} */
+.customer_container {
+  margin-top: 30px;
+  padding-top: 30px;
+  margin-left: 30px;
+  width: 250px;
+  font-size: 15px;
+  color: #3f3f3f;
+  background-color: #d5d5d5;
+}
+
+.customer_container>input {
+  padding: 5px;
+  width: 40%;
+  margin-left: 10px;
+  margin-bottom: 13px;
+  border: none;
+  font-size: 18px;
+  color: #5C70A7;
+  display: inline-block;
+  float: left;
+  font-family: Menlo, monospace;
+}
+
+#seat-row, #seat-number {
+  width: 15%;
+}
+
+.customer_container>span {
+  display: inline-block;
+  margin-left: 10px;
+  float: left;
+  clear: left;
+  width: 80px;
+  text-align: right;
+  margin-top: 6px;
+}
+
+.customer_container>select {
+  font-size: 15px;
+  margin-bottom: 10px;
+  color: #5C70A7;
+  margin-left: 10px;
+  padding: 10px;
+}
+
+.customer_container>p {
+  font-weight: bold;
+  font-size: 20px;
+  text-align: center;
+}
+
+.order {
+  margin: 25%;
+  padding: 8px 30px;
+  font-size: 20px;
+  margin-right: 25%;
+  font-family: Menlo, monospace;
+  background-color: #809bd4;
+  border-radius: 3px;
+}
+
+.show_ticket{
+  background-color:Transparent;
+  padding:0;
 }
