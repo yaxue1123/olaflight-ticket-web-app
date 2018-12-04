@@ -142,8 +142,7 @@ var show_one_flight = function(one_flight, input) {
   let hour = parseInt(duration / 3600000);
   let minute = Math.round((duration / 3600000 - hour) * 60);
 
-  //add space for image
-  c_div.append('<div class = "aireline_img"></div>');
+
 
   //add flight info
   c_div.append('<div class = "flight_info"></div>');
@@ -154,6 +153,7 @@ var show_one_flight = function(one_flight, input) {
 
   // airport info.
   search_airport(one_flight);
+
 
   // price.
   c_div.append('<div class = "price">$' + one_flight.info + '</div>');
@@ -208,6 +208,9 @@ var show_one_flight = function(one_flight, input) {
     function search_airline(response, id) {
       for (let prop in response) {
         if (response[prop].id === id) {
+          //add space for image
+          c_div.append('<img class = "airline_img" src="'+ response[prop].logo_url + '">');
+
           c_div.children(".flight_info").children(".flight-wrap")
             .append('<span class = "airline_name">' + response[prop].name + '</span>');
           c_div.children(".flight_info").children(".flight-wrap")

@@ -172,8 +172,9 @@ select {
 }
 
 /* set the flight info style */
-.aireline_img {
+.airline_img {
   grid-area: img;
+  width: 70%;
 }
 
 .flight_info {
