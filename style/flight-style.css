@@ -175,6 +175,7 @@ select {
 .airline_img {
   grid-area: img;
   width: 70%;
+  align-self: center;
 }
 
 .flight_info {
@@ -185,14 +186,17 @@ select {
 
 .flight-wrap {
   grid-column: 1 / 3;
+  align-self: center;
 }
 
 .price {
   grid-area: prc;
   font-size: 20px;
+  align-self: center;
+  justify-self: center;
 }
 
-.checkouy {
+.checkout {
   grid-area: chk;
 }
 
@@ -223,19 +227,108 @@ select {
   font-size: 30px;
 }
 
-.checkout {
+.checkout, button {
   font-size: 16px;
-  padding: 12px 0px;
+  padding: 12px 12px;
   background-color: #5C70A7;
   color: white;
   font-family: Menlo, monospace;
 }
 
 .airport_info {
-  margin-top: 10%;
+  align-self: center;
 }
 
 input, select, button {
   outline: none;
   cursor: pointer;
 }
+
+/***************************************************************/
+/**************** style for view ticket page *******************/
+/***************************************************************/
+
+.ticket-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+  background: url('../image/hp-bg.png');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.ticket {
+  display: grid;
+  grid-template-columns: 50% 1fr 1fr 1fr;
+  grid-template-rows: 1fr 1fr 1fr 1fr;
+  grid-template-areas: 
+  "airline . . ."
+  "flight price user user"
+  "flight duration seat seat"
+  "date . . logo";
+  align-items: center;
+  background: #FFF;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.50);
+  padding: 15px;
+  margin-bottom: 15px;
+  color: #3f3f3f;
+  line-height: 150%;
+  height: 20em;
+  width: 60%;
+}
+
+.ticket-airline, .ticket-flight, .ticket-duration, 
+.ticket-date, .ticket-seat, .ticket-user, .ticket-price, .t-logo {
+  font-family: 'VT323';
+  align-self: center;
+  justify-self: center;
+  font-size: 1.5em;
+}
+
+.ticket-airline {
+  grid-area: airline;
+  font-size: 3em;
+  justify-self: start;
+}
+
+.ticket-price {
+  grid-area: price;
+  font-size: 2em;
+  font-weight: bold;
+}
+
+.ticket-flight {
+  grid-area: flight; 
+  font-size: 2em;
+  line-height: 150%; 
+  justify-self: start;
+}
+
+.ticket-duration {
+  grid-area: duration;
+}
+
+.ticket-date {
+  grid-area: date;
+}
+
+.ticket-user {
+  grid-area: user;
+}
+
+.ticket-seat {
+  grid-area: seat;
+}
+
+.ticket-logo {
+  grid-area: logo;
+}
+
+.ticket-logo img {
+  width: 100%;
+}
+

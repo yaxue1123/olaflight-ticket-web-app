@@ -12,7 +12,7 @@ $(document).ready(() => {
 
   // ######################## P1 -> P2: search ###########################
   //listen to the click button
-  $('body').on('click', '.search-btn', function() {
+  $('body').on('click', '.search-btn', function () {
     let record = get_search_input();
     //remove the current div
     $(".content_div").children().remove();
@@ -25,7 +25,7 @@ $(document).ready(() => {
   });
 
   // ##################### P2 -> P3: select + fill info ##################
-  $('body').on('click', '.checkout', function() {
+  $('body').on('click', '.checkout', function () {
     let record = get_search_input();
     let flight_id = $(this).attr("id");
     let body = $('body');
@@ -83,7 +83,7 @@ $(document).ready(() => {
   });
 
   // ###################### P3: create ticket ############################
-  $('body').on('click', '#order', function() {
+  $('body').on('click', '#order', function () {
     let flight_id = $('#flight-id').text();
 
     // choose seat and create a seat object.
@@ -105,13 +105,13 @@ $(document).ready(() => {
   });
 
   // ###################### P4: view ticket ##############################
-  $('body').on('click', '.view-ticket', function() {
-    console.log($(this).attr("id"));
+  $('body').on('click', '.view-ticket', function () {
     let ticket_id = parseInt($(this).attr("id"));
     let body = $('body');
 
     // clear body, new page.
     body.empty();
+    body.append($('<div class="ticket-container"><div>'));
 
     $.ajax({
       url: root_url + 'tickets/' + ticket_id,
@@ -120,9 +120,16 @@ $(document).ready(() => {
         withCredentials: true
       },
       success: (response) => {
-        show_ticket(response);
+        $('.ticket-container').append(show_ticket(response));
+        $('.ticket-container').append('<button id="tickect-to-search">Back to home</button>');
       }
     });
+  });
+
+  // ###################### P4 - P1: back to home #######################
+  $('body').on('click', '#tickect-to-search', function () { 
+    // TO DO. Don't reload and rerender.
+    location.reload();
   });
 
   // ###################### P2: sort ##############################
@@ -135,14 +142,8 @@ $(document).ready(() => {
 
 });
 
-var show_one_flight = function(one_flight, input) {
+var show_one_flight = function (one_flight, input) {
   let c_div = $('<div class="flight" id="' + one_flight.number + '"></div>');
-  // in millisecond.
-  let duration = Math.abs(moment(one_flight.departs_at) - moment(one_flight.arrives_at));
-  let hour = parseInt(duration / 3600000);
-  let minute = Math.round((duration / 3600000 - hour) * 60);
-
-
 
   //add flight info
   c_div.append('<div class = "flight_info"></div>');
@@ -209,7 +210,7 @@ var show_one_flight = function(one_flight, input) {
       for (let prop in response) {
         if (response[prop].id === id) {
           //add space for image
-          c_div.append('<img class = "airline_img" src="'+ response[prop].logo_url + '">');
+          c_div.append('<img class = "airline_img" src="' + response[prop].logo_url + '">');
 
           c_div.children(".flight_info").children(".flight-wrap")
             .append('<span class = "airline_name">' + response[prop].name + '</span>');
@@ -218,7 +219,8 @@ var show_one_flight = function(one_flight, input) {
             .append('<span class = "time_scope">' +
               moment(one_flight.departs_at).format('LT') + ' - ' +
               moment(one_flight.arrives_at).format('LT') + '</span>')
-            .append('<span class = "duration">' + hour + 'h' + minute + 'min</span>');
+            .append('<span class = "duration">' +
+              calculate_duration(one_flight.departs_at, one_flight.arrives_at) + '</span>');
         }
       }
     }
@@ -251,9 +253,9 @@ var show_search_result = function (info, sort) {
 
       // from low to high. less money/ shorter duration.
       if (sort === "sort-price") {
-        all_flights.sort((a,b) => (parseInt(a.info) > parseInt(b.info)) ? 1 : -1);
+        all_flights.sort((a, b) => (parseInt(a.info) > parseInt(b.info)) ? 1 : -1);
       } else if (sort === "sort-duration") {
-        all_flights.sort(function(a, b) {
+        all_flights.sort(function (a, b) {
           let duration_a = Math.abs(moment(a.departs_at) - moment(a.arrives_at));
           let duration_b = Math.abs(moment(b.departs_at) - moment(b.arrives_at));
           return duration_a > duration_b ? 1 : -1;
@@ -269,7 +271,7 @@ var show_search_result = function (info, sort) {
   });
 }
 
-var set_result_page = function(input) {
+var set_result_page = function (input) {
   //add search bar
   $(".title_div").after('<div class = "search_div"></div>');
   $(".search_div").append('<div class="group"><span>From</span><input id="depart" type="text" list="airport" autocomplete=off><span>To</span><input id="arrive" type="text" list="airport" autocomplete=off></div>');
@@ -294,7 +296,7 @@ var set_result_page = function(input) {
   show_search_result(input, "no sort");
 }
 
-var get_search_input = function() {
+var get_search_input = function () {
   //get the time data, airport data
   let date = $("#datepicker").datepicker('getDate');
   let month = date.getMonth() + 1;
@@ -313,11 +315,11 @@ var get_search_input = function() {
   };
 }
 
-var datepicker_voke = function() {
+var datepicker_voke = function () {
   $("#datepicker").datepicker();
 }
 
-var airport_compelete = function() {
+var airport_compelete = function () {
   login();
   let air_list;
   //get json data
@@ -327,7 +329,7 @@ var airport_compelete = function() {
     xhrFields: {
       withCredentials: true
     },
-    success: function(response) {
+    success: function (response) {
       let air_array = response;
       air_list = "<datalist id='airport'>";
       for (let i = 0; i < air_array.length; i++) {
@@ -342,13 +344,13 @@ var airport_compelete = function() {
     }
   });
 
-  let create_airport_list = function(a_array) {
+  let create_airport_list = function (a_array) {
     let a_list = '<option id = "' + a_array.id + '" value = "' + a_array.code + ", " + a_array.city + ", " + a_array.state + '">';
     return a_list;
   }
 }
 
-var create_seat = function(plane_id, row, number) {
+var create_seat = function (plane_id, row, number) {
   $.ajax({
     url: root_url + 'seats',
     type: 'POST',
@@ -369,7 +371,7 @@ var create_seat = function(plane_id, row, number) {
   });
 }
 
-var create_ticket = function(response) {
+var create_ticket = function (response) {
   // create a ticket.
   // must wait seat create success.
   $.ajax({
@@ -398,20 +400,29 @@ var create_ticket = function(response) {
   });
 }
 
-var show_ticket = function(one_ticket) {
-  let body = $('body');
-  body.append('First name: <div id="t-first-name">' + one_ticket.first_name + '</div>');
-  body.append('Last name: <div id="t-last-name">' + one_ticket.last_name + '</div>');
-  body.append('Age: <div id="t-age">' + one_ticket.age + '</div>');
-  body.append('Gender: <div id="t-gender">' + one_ticket.gender + '</div>');
+var show_ticket = function (one_ticket) {
+  let tdiv = $('<div class="ticket"></div>');
+  let t_airline = $('<div class="ticket-airline"></div>');
+  let t_flight = $('<div class="ticket-flight"></div>');
+  let t_duration = $('<div class="ticket-duration"></div>');
+  let t_price = $('<div class="ticket-price"></div>');
+  let t_user = $('<div class="ticket-user"></div>');
+  let t_seat = $('<div class="ticket-seat"></div>');
+  let t_date = $('<div class="ticket-date"></div>');
+  let t_logo = $('<div class="ticket-logo"></div>');
+
+  // user info.
+  t_user.append(one_ticket.first_name + ' ');
+  t_user.append(one_ticket.last_name + ' ');
+  t_user.append(one_ticket.gender);
+
   // seat info via seat id.
   $.ajax({
     url: root_url + 'seats/' + one_ticket.seat_id,
     type: 'GET',
     xhrFields: { withCredentials: true },
-    success: (response) => {
-      body.append('Seat row: <div id="t-seat">' + response.row + '</div>');
-      body.append('Seat number: <div id="t-seat">' + response.number + '</div>');
+    success: (seat) => {
+      t_seat.append('Seat: ' + seat.row + seat.number);
     }
   });
 
@@ -420,24 +431,72 @@ var show_ticket = function(one_ticket) {
     url: root_url + 'instances/' + one_ticket.instance_id,
     type: 'GET',
     xhrFields: { withCredentials: true },
-    success: (response) => {
+    success: (instance) => {
       // date.
-      body.append('Date: <div id="t-seat">' + response.date + '</div>');
+      t_date.append('Depart at ' + instance.date);
       // flight info.
       $.ajax({
-        url: root_url + 'flights/' + response.flight_id,
+        url: root_url + 'flights/' + instance.flight_id,
         type: 'GET',
         xhrFields: { withCredentials: true },
-        success: (response) => {
-          let flight_info = show_one_flight(response, "one");
-          body.append(flight_info);
+        success: (flight) => {
+          // flight info.
+          t_flight.append(flight.number + '<br>');
+          t_flight.append(moment(flight.departs_at).format('LT') + ' - ' + moment(flight.arrives_at).format('LT') + '<br>');
+          t_duration.append(calculate_duration(flight.departs_at, flight.arrives_at));
+          t_price.append('$' + flight.info);
+
+          // airline.
+          $.ajax({
+            url: root_url + 'airlines',
+            type: 'GET',
+            xhrFields: {
+              withCredentials: true
+            },
+            success: (airline) => {
+              for (prop in airline) {
+                if (flight.airline_id === airline[prop].id) {
+                  t_airline.append(airline[prop].name);
+                  t_logo.append('<img src="' + airline[prop].logo_url + '">');
+                }
+              }
+            }
+          });
+
+          // airport.
+          let airports = {};
+          $.ajax({
+            url: root_url + 'airports',
+            type: 'GET',
+            xhrFields: {
+              withCredentials: true
+            },
+            success: (airport) => {
+              for (let prop in airport) {
+                if (airport[prop].id == flight.departure_id) {
+                  airports.departure = airport[prop];
+                }
+
+                if (airport[prop].id == flight.arrival_id) {
+                  airports.arrival = airport[prop];
+                }
+              }
+
+              t_flight.append(airports.departure.code + ' -> ' + airports.arrival.code);
+            }
+          });
+
         }
       });
     }
   });
+
+  // add styled element.
+  tdiv.append(t_airline, t_flight, t_duration, t_price, t_date, t_user, t_seat, t_logo);
+  return tdiv;
 }
 
-var login = function() {
+var login = function () {
   $.ajax({
     url: root_url + 'sessions',
     type: 'POST',
@@ -451,4 +510,13 @@ var login = function() {
       },
     }
   });
+}
+
+var calculate_duration = function (departs_at, arrives_at) {
+  // in millisecond.
+  let duration = Math.abs(moment(departs_at) - moment(arrives_at));
+  let hour = parseInt(duration / 3600000);
+  let minute = Math.round((duration / 3600000 - hour) * 60);
+
+  return hour + 'h' + minute + 'min';
 }
