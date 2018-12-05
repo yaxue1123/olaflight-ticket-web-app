@@ -1,25 +1,31 @@
 <!DOCTYPE html>
+<!DOCTYPE html>
 <html>
-  <head>
-    <!-- This stylesheet contains specific styles for displaying
-         the map on this page. Replace it with your own styles as
-         described in the documentation:
-         https://developers.google.com/maps/documentation/javascript/tutorial
-    -->
-    <!-- <link rel="stylesheet" href="/maps/documentation/javascript/cgc/demos.css"> -->
-  </head>
-  <body>
-    <div id="map"></div>
-    <script>
+<head>
+  <link rel="stylesheet" href="style/flight-style.css">
+</head>
+
+<body>
+  <div id="map"></div>
+  <h1>YAYAYAYAYA</h1>
+  <script>
     var map;
-      function initMap() {
-        map = new google.maps.Map(document.getElementById('map'), {
-          center: {lat: -34.397, lng: 150.644},
-          zoom: 8
-        });
-      }
-    </script>
-   <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBPYk-wQWgG7AsrRTG1zlCQt3EgsdoAkmw&callback=initMap"
-   async defer></script>
-  </body>
+    var myLatLng = {lat: 35.87, lng: -78.8};
+
+    function initMap() {
+      map = new google.maps.Map(document.getElementById('map'), {
+        center: myLatLng,
+        zoom: 12
+      });
+
+      var marker = new google.maps.Marker({
+        position: myLatLng,
+        map: map
+      });
+    }
+  </script>
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBPYk-wQWgG7AsrRTG1zlCQt3EgsdoAkmw&callback=initMap"
+    async defer></script>
+</body>
+
 </html>

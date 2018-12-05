@@ -171,6 +171,7 @@ $(document).ready(() => {
       success: (response) => {
         $('.ticket-container').append(show_ticket(response));
         $('.ticket-container').append('<button id="tickect-to-search">Back to home</button>');
+        $('.ticket-container').append('<div id="map-container"></div>');
       }
     });
 
@@ -209,13 +210,16 @@ $(document).ready(() => {
             body.append(show_ticket(tickets[prop]));
           }
         }
-        // $('.ticket-container').append(show_ticket(response));
-        // $('.ticket-container').append('<button id="tickect-to-search">Back to home</button>');
+      
       }
     });
   });
 
 });
+
+var build_home = function() {
+  
+}
 
 var show_seat = function () {
   // ###################### P3: show seat. ##############################

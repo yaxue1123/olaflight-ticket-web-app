@@ -12,7 +12,7 @@ $(document).ready(() => {
     // ###################### P4: view ticket ##############################
 
   
-        let ticket_id = 7772;
+        let ticket_id = 7788;
         let body = $('body');
     
         // clear body, new page.
@@ -20,6 +20,7 @@ $(document).ready(() => {
         $('.content_div').empty();
     
         $('.content_div').append($('<div class="ticket-container"><div>'));
+        $('.content_div').append($('<div class="google-map"><div>'));
     
         $.ajax({
           url: root_url + 'tickets/' + ticket_id,
@@ -30,10 +31,35 @@ $(document).ready(() => {
           success: (response) => {
             $('.ticket-container').append(show_ticket(response));
             $('.ticket-container').append('<button id="tickect-to-search">Back to home</button>');
+            add_map();
           }
         });
 
+        $.ajax({
+            url: root_url + 'airports',
+            type: 'GET',
+            xhrFields: {
+                withCredentials: true
+            },
+            success: (airport) => {
+                let map_airport = $('#map-airport').text();
+                console.log("yeah!" + map_airport);
+            
+                for (let prop in airport) {
+                    if (airport[prop].code == map_airport) {
+                        console.log("yeah!" + map_airport);
+                    }
+                }
+                    //$(".google-map").load("administrator.html");
+               
+            } 
+        });
+
 });
+
+var add_map = function(ticket) {
+    console.log(ticket);
+}
 
 // ###################### P4: view ticket ##############################
 // ###################### P4: view ticket ##############################
@@ -118,8 +144,8 @@ var show_ticket = function (one_ticket) {
                                     airports.arrival = airport[prop];
                                 }
                             }
-
-                                t_flight.append(airports.departure.code + ' -> ' + airports.arrival.code);
+                                //$(".google-map").load("administrator.html");
+                                t_flight.append('<a id="map-airport">' + airports.departure.code + '</a> -> ' + airports.arrival.code);
                         } 
                     });
 
