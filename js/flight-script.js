@@ -187,23 +187,14 @@ $(document).ready(() => {
     let info = {};
     info.depart_id = $("#depart").attr("airport-id");
     info.arrive_id = $("#arrive").attr("airport-id");
+    console.log("info1:" + info[0]);
     show_search_result(info, $(this).attr("id"));
   });
 
   // ###################### Every page: view trip ##############################
-  $('body').on('click', '#view_trip', function() {
-    //hide the current layout
-    let div_to_change = $('.content_div');
-    $('.title_div').children('#sub-banner, #view_trip').toggleClass('show_trips');
-    $('.search_div').toggleClass('show_trips');
-    $('.content_div').children().toggleClass('show_trips');
-    //show the necessary
-    $(".title_div").append('<button id = "back_page">Back</button>');
-    $("body").attr("id", "ticket");
-    $('#title-img').css('display', 'block');
-    // $('.show_trips').toggleClass('show_trips');
-    $('.show_trips').toggle();
-    $('.content_div').append('<p class = "user_account">Hello, ' + credentials.username + '.');
+  $('body').on('click', '#view_trip', function () { 
+    let body = $('body');
+    body.empty();
 
 
 
@@ -216,7 +207,7 @@ $(document).ready(() => {
         withCredentials: true
       },
       success: (tickets) => {
-        for (prop in tickets) {
+        for (let prop in tickets) {
           if (tickets[prop].user_id === user_id) {
             //here to add collapse;
             div_to_change.append('<button class="collapsible" id = ' + tickets[prop].id + ' >Ticket number ' + tickets[prop].id + ' <i class="fas fa-caret-down"></i></button>');
@@ -440,7 +431,9 @@ var show_search_result = function(info, sort) {
 var set_result_page = function(input) {
   //add search bar
   $(".title_div").after('<div class = "search_div"></div>');
-  $(".search_div").append('<div class="group"><span>From</span><input id="depart" type="text" list="airport" autocomplete=off><span>To</span><input id="arrive" type="text" list="airport" autocomplete=off></div>');
+  $(".search_div").append('<div class="group"><span>From</span>' +
+    '<input id="depart" type="text" list="airport" autocomplete=off>' +
+    '<span>To</span><input id="arrive" type="text" list="airport" autocomplete=off></div>');
   $(".search_div").append('<div class="group"><span>On</span><input type="text" id="datepicker"></div>');
   $(".search_div").append('<button class="search-btn" id = "sub-search">Search</button>');
   //set default value
@@ -450,8 +443,8 @@ var set_result_page = function(input) {
   airport_compelete();
   let d_input = input['depart_text'];
   let a_input = input['arrive_text'];
-  $("#depart").val(d_input).css("font-size", "15px").css("color", "#3f3f3f");
-  $("#arrive").val(a_input).css("font-size", "15px").css("color", "#3f3f3f");
+  $("#depart").val(d_input).css("font-size", "15px").css("color", "#3f3f3f").attr("airport-id", input.depart_id);
+  $("#arrive").val(a_input).css("font-size", "15px").css("color", "#3f3f3f").attr("airport-id", input.arrive_id);
 
   //add sort function
   $(".content_div")
@@ -499,10 +492,7 @@ var airport_compelete = function() {
       let air_array = response;
       air_list = "<datalist id='airport'>";
       for (let i = 0; i < air_array.length; i++) {
-
         air_list = air_list + create_airport_list(air_array[i]);
-        // qlist.append(qdiv);
-        // let qid = air_array[i].id;
       }
       air_list = air_list + "</datalist>";
       $("#depart").append(air_list);
@@ -627,7 +617,7 @@ var show_ticket = function(one_ticket) {
               withCredentials: true
             },
             success: (airline) => {
-              for (prop in airline) {
+              for (let prop in airline) {
                 if (flight.airline_id === airline[prop].id) {
                   t_airline.append(airline[prop].name);
                   t_logo.append('<img src="' + airline[prop].logo_url + '">');
@@ -693,3 +683,5 @@ var calculate_duration = function(departs_at, arrives_at) {
 
   return hour + 'h' + minute + 'min';
 }
+
+
