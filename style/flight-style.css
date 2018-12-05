@@ -460,3 +460,8 @@ input, select, button {
 .clean {
   margin-top: 3em;
 }
+
+/**** google map ******/
+#map {
+  height: 100%;
+}
