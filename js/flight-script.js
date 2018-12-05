@@ -198,6 +198,9 @@ $(document).ready(() => {
       $('.title_div').children('#sub-banner, #view_trip').toggleClass('show_trips');
       $('.search_div').toggleClass('show_trips');
       $('.content_div').children().toggleClass('show_trips');
+      if($('.content_div').is('#select_seat')){
+        $('.content_div').attr('id','not_select');
+      }
       //show the necessary
       $(".title_div").append('<button id = "back_page">Back</button>');
       $("body").attr("id", "ticket");
@@ -205,6 +208,7 @@ $(document).ready(() => {
       // $('.show_trips').toggleClass('show_trips');
       $('.show_trips').toggle();
       $('.content_div').append('<p class = "user_account">Hello, ' + credentials.username + '.');
+
 
     // $('.back_page').toggle("display","block");
 
@@ -258,8 +262,13 @@ $(document).ready(() => {
     $('.show_trips').toggleClass('show_trips');
     console.log($('.title_div').children().has('#sub-banner'));
     if ($('.title_div').has('#sub-banner').length != 0) {
+      console.log('subpage');
       $('body').attr('id', 'sub');
       $('#title-img').css('display','none');
+      if($('.content_div').is('#not_select')){
+        console.log('grid');
+        $('.content_div').attr('id','select_seat');
+      };
     } else {
       $('body').attr('id', 'hp');
     }
