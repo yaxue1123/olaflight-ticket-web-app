@@ -192,11 +192,19 @@ $(document).ready(() => {
   });
 
   // ###################### Every page: view trip ##############################
-  $('body').on('click', '#view_trip', function () { 
-    let body = $('body');
-    body.empty();
-
-
+  $('body').on('click', '#view_trip', function() {
+      //hide the current layout
+      let div_to_change = $('.content_div');
+      $('.title_div').children('#sub-banner, #view_trip').toggleClass('show_trips');
+      $('.search_div').toggleClass('show_trips');
+      $('.content_div').children().toggleClass('show_trips');
+      //show the necessary
+      $(".title_div").append('<button id = "back_page">Back</button>');
+      $("body").attr("id", "ticket");
+      $('#title-img').css('display', 'block');
+      // $('.show_trips').toggleClass('show_trips');
+      $('.show_trips').toggle();
+      $('.content_div').append('<p class = "user_account">Hello, ' + credentials.username + '.');
 
     // $('.back_page').toggle("display","block");
 
@@ -683,5 +691,3 @@ var calculate_duration = function(departs_at, arrives_at) {
 
   return hour + 'h' + minute + 'min';
 }
-
-
