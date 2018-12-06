@@ -13,22 +13,21 @@ $(document).ready(() => {
   airport_compelete();
 
   // ######################## P1 -> P2: search ###########################
-  //listen to the click button
-  // $('body').on('click', '.search-btn', function () {
-  //   let record = get_search_input();
-  //   //remove the current div
-  //   $(".title_div").children("#sub-banner").remove();
-  //   $(".search_div").remove();
-  //   $(".search_div").toggleClass("show_ticket");
-  //   $(".content_div").children().remove();
-  //   $("body").attr("id", "sub");
-  //   $(".title_div").children("#title-img").hide();
-  //   $(".title_div").append("<img id='sub-banner' src='./image/sub-banner.png' alt='sub-logo'>")
+  $('body').on('click', '.search-btn', function () {
+    let record = get_search_input();
+    //remove the current div
+    $(".title_div").children("#sub-banner").remove();
+    $(".search_div").remove();
+    $(".search_div").toggleClass("show_ticket");
+    $(".content_div").children().remove();
+    $("body").attr("id", "sub");
+    $(".title_div").children("#title-img").hide();
+    $(".title_div").append("<img id='sub-banner' src='./image/sub-banner.png' alt='sub-logo'>")
 
-  //   //call to load a new mode
-  //   set_result_page(record);
-  //   datepicker_voke();
-  // });
+    //call to load a new mode
+    set_result_page(record);
+    datepicker_voke();
+  });
 
   // ##################### P2 -> P3: select + fill info ##################
   $('body').on('click', '.checkout', function () {
@@ -73,7 +72,6 @@ $(document).ready(() => {
         customer_container.append('<br><button class="order" id = ' + instance.id + '>Order</button>');
         // ! Important: please don't delete!!! style already as display none.
         $('body').append('<a id="instance-id">' + instance.id + '</a>');
-        console.log("success create instance!!!");
       }
     });
 
@@ -122,7 +120,6 @@ $(document).ready(() => {
       customer_container.children("#seat-number").val('');
       let seat_row = e.currentTarget.innerHTML[0];
       let seat_number = e.currentTarget.innerHTML[1];
-      // console.log(seat_row, seat_number);
       customer_container.children("#seat-row").val(seat_row);
       customer_container.children("#seat-number").val(seat_number);
     });
@@ -178,7 +175,7 @@ $(document).ready(() => {
   });
 
   // ###################### P4 - P1: back to home #######################
-  $('body').on('click', '#test', function () {
+  $('body').on('click', '#back-home', function () {
     // TO DO. Don't reload and rerender.
     // rebuild the home page.
     build_home();
@@ -189,7 +186,6 @@ $(document).ready(() => {
     let info = {};
     info.depart_id = $("#depart").attr("airport-id");
     info.arrive_id = $("#arrive").attr("airport-id");
-    console.log("info1:" + info[0]);
     show_search_result(info, $(this).attr("id"));
   });
 
@@ -218,14 +214,20 @@ $(document).ready(() => {
         withCredentials: true
       },
       success: (tickets) => {
+        let sorted = [];
         for (let prop in tickets) {
           if (tickets[prop].user_id === user_id) {
-            //here to add collapse;
-            div_to_change.append('<button class="collapsible" id = ' + tickets[prop].id + ' >Ticket number ' + tickets[prop].id + ' <i class="fas fa-caret-down"></i></button>');
-            // div_to_change.append("ticket number: " + tickets[prop].id);
-            div_to_change.append('<div class="ticket_content"></div>');
-            $(div_to_change).children('.ticket_content').append(show_ticket(tickets[prop]));
+            // store all this user's orders.
+            sorted.push(tickets[prop]);
           }
+        }
+        // sort from high to low (newest to oldest)
+        sorted.sort((a, b) => (parseInt(a.id) > parseInt(b.id)) ? -1 : 1);
+        for (let prop in sorted) {
+          //here to add collapse.
+          div_to_change.append('<button class="collapsible" id = ' + sorted[prop].id + ' >Ticket number ' + sorted[prop].id + ' <i class="fas fa-caret-down"></i></button>');
+          div_to_change.append('<div class="ticket_content"></div>');
+          $(div_to_change).children('.ticket_content').append(show_ticket(sorted[prop]));
         }
       }
     });
@@ -236,7 +238,6 @@ $(document).ready(() => {
       $(get_div_by_id).toggleClass('active');
 
       let content = $(get_div_by_id).next();
-      console.log(content.css("max-height"));
       if (content.height() == 0) {
         content.css("max-height", content.children('.ticket').height());
         $(get_div_by_id).children('.fa-w-10').removeClass('fa-caret-down').addClass('fa-caret-up');
@@ -259,13 +260,10 @@ $(document).ready(() => {
     //toggle all the hidden page
     $('.show_trips').toggle();
     $('.show_trips').toggleClass('show_trips');
-    console.log($('.title_div').children().has('#sub-banner'));
     if ($('.title_div').has('#sub-banner').length != 0) {
-      console.log('subpage');
       $('body').attr('id', 'sub');
       $('#title-img').css('display', 'none');
       if ($('.content_div').is('#not_select')) {
-        console.log('grid');
         $('.content_div').attr('id', 'select_seat');
       };
     } else {
@@ -474,13 +472,9 @@ var set_result_page = function (input) {
 var get_search_input = function () {
   //get the time data, airport data
   let date = $("#datepicker").datepicker('getDate');
-  try {
-    let month = date.getMonth() + 1;
-    let day = date.getDate();
-  }
-  catch(err) {
-   // alert("Please pick a date :)")
-  }
+  let month = date.getMonth() + 1;
+  let day = date.getDate();
+
   let select_date = [month, day];
   let depart_ap = $("#airport option[value='" + $("#depart").val() + "']").attr("id");
   let arrive_ap = $("#airport option[value='" + $("#arrive").val() + "']").attr("id");
@@ -496,7 +490,7 @@ var get_search_input = function () {
 }
 
 var datepicker_voke = function () {
-    $("#datepicker").datepicker();
+  $("#datepicker").datepicker();
 }
 
 var airport_compelete = function () {
@@ -542,7 +536,6 @@ var create_seat = function (plane_id, row, number) {
       }
     },
     success: (response) => {
-      console.log("success create seat!!!");
       create_ticket(response);
     }
   });
@@ -570,7 +563,6 @@ var create_ticket = function (response) {
       }
     },
     success: (ticket) => {
-      console.log("success create ticket!!!");
       $('.order').remove();
       $('.customer_container').append('<div id="order-msg">Thank you for the order.</div>');
       $('.customer_container').append('<button class="view-ticket" id="' + ticket.id + '">View order</button>');
@@ -706,7 +698,6 @@ var calculate_duration = function (departs_at, arrives_at) {
 }
 
 var build_home = function () {
-  console.log("building");
   let body = $('body');
   body.empty();
 
