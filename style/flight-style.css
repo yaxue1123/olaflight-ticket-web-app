@@ -7,8 +7,12 @@ body {
   font-family: 'Lucida Grande';
 }
 
-footer{
-  grid-area:foot;
+footer {
+  grid-area: foot;
+  text-align: center;
+  padding: 10px 0 10px 0;
+  font-size: 12px;
+  color: #ababab;
 }
 
 #hp {
@@ -24,7 +28,7 @@ footer{
   background: url('../image/hp-bg.png');
   height: 100%;
   background-position: center;
-  background-repeat:repeat-y;
+  background-repeat: repeat-y;
   background-size: cover;
   color: #FFFFFF;
   padding-bottom
@@ -155,8 +159,6 @@ select {
 #sub {
   background-color: #F1F1F1;
 }
-
-
 
 .group>* {
   text-align: left;
