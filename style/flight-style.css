@@ -7,6 +7,10 @@ body {
   font-family: 'Lucida Grande';
 }
 
+footer{
+  grid-area:foot;
+}
+
 #hp {
   background: url('../image/hp-bg.png');
   height: 100%;
@@ -23,6 +27,7 @@ body {
   background-repeat:repeat-y;
   background-size: cover;
   color: #FFFFFF;
+  padding-bottom
 }
 
 #sub-banner {
@@ -64,7 +69,8 @@ body {
   grid-template-areas:
     "head head head head head head head head head head"
     "serc serc serc serc serc serc serc serc serc serc"
-    "sidL cont cont cont cont cont cont cont cont sidR";
+    "sidL cont cont cont cont cont cont cont cont sidR"
+    "foot foot foot foot foot foot foot foot foot foot";
 }
 
 button {
@@ -468,6 +474,7 @@ input, select, button {
   text-align: left;
   outline: none;
   font-size: 15px;
+  border-radius: 0;
 }
 
 <<<<<<< HEAD
