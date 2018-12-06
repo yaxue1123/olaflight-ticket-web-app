@@ -16,6 +16,15 @@ body {
   color: #FFFFFF;
 }
 
+#ticket {
+  background: url('../image/hp-bg.png');
+  height: 100%;
+  background-position: center;
+  background-repeat:repeat-y;
+  background-size: cover;
+  color: #FFFFFF;
+}
+
 #sub-banner {
   width: 100%;
 }
@@ -69,7 +78,7 @@ button {
   width: 15%;
 }
 
-#view_trip {
+#view_trip, #back_page {
   margin-left: 42%;
   background-color: transparent;
   color: #FFFFFF;
@@ -78,6 +87,9 @@ button {
   font-family: athelas, serif;
   font-style: normal;
   position: fixed;
+  margin-bottom: 50px;
+  border: 1px solid #FFF;
+  border-radius: 3px;
 }
 
 .wrap {
@@ -138,11 +150,7 @@ select {
   background-color: #F1F1F1;
 }
 
-#view_trip {
-  margin-bottom: 50px;
-  border: 1px solid #FFF;
-  border-radius: 3px;
-}
+
 
 .group>* {
   text-align: left;
@@ -254,7 +262,6 @@ input, select, button {
 /***************************************************************/
 /**************** style for view ticket page *******************/
 /***************************************************************/
-
 .ticket-container {
   display: flex;
   flex-direction: column;
@@ -273,11 +280,11 @@ input, select, button {
   display: grid;
   grid-template-columns: 50% 1fr 1fr 1fr;
   grid-template-rows: 1fr 1fr 1fr 1fr;
-  grid-template-areas: 
-  "airline . . ."
-  "flight price user user"
-  "flight duration seat seat"
-  "date . . logo";
+  grid-template-areas:
+    "airline . . ."
+    "flight price user user"
+    "flight duration seat seat"
+    "date . . logo";
   align-items: center;
   background: #FFF;
   box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.50);
@@ -289,7 +296,7 @@ input, select, button {
   width: 70%;
 }
 
-.ticket-airline, .ticket-flight, .ticket-duration, 
+.ticket-airline, .ticket-flight, .ticket-duration,
 .ticket-date, .ticket-seat, .ticket-user, .ticket-price, .t-logo {
   font-family: 'VT323';
   align-self: center;
@@ -310,9 +317,9 @@ input, select, button {
 }
 
 .ticket-flight {
-  grid-area: flight; 
+  grid-area: flight;
   font-size: 2.5em;
-  line-height: 150%; 
+  line-height: 150%;
   justify-self: start;
 }
 
@@ -339,7 +346,6 @@ input, select, button {
 .ticket-logo img {
   width: 100%;
 }
-
 
 /***************************************************************/
 /**************** style for customer page *******************/
@@ -437,9 +443,9 @@ input, select, button {
   border-radius: 3px;
 }
 
-.show_ticket{
-  background-color:Transparent;
-  padding:0;
+.show_ticket {
+  background-color: Transparent;
+  padding: 0;
 }
 
 /***** hide instance id ******/
@@ -447,16 +453,24 @@ input, select, button {
   display: none;
 }
 
-/**** clean database page *****/
-.clean-wrap {
-  height: 100%;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+.show_ticket>* {
+  display: none;
 }
 
+/*****style for the collapsible******/
+.collapsible {
+  background-color: #f3f3f3;
+  color: #3f3f3f;
+  cursor: pointer;
+  padding: 18px;
+  width: 100%;
+  border: none;
+  text-align: left;
+  outline: none;
+  font-size: 15px;
+}
+
+<<<<<<< HEAD
 .clean {
   margin-top: 3em;
 }
@@ -465,3 +479,18 @@ input, select, button {
 #map {
   height: 100%;
 }
+=======
+.active, .collapsible:hover {
+  background-color: #ffffff;
+}
+
+.ticket_content {
+  padding: 10px;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.2s ease-out;
+  background-color: #f1f1f1;
+}
+
+.ticket_content>.ticket {}
+>>>>>>> e7ad68030e9e6a4aee350260da692345c000e75a
