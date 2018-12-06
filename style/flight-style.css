@@ -440,12 +440,13 @@ input, select, button {
 
 .view-ticket {
   margin: 20%;
-  padding: 8px 30px;
+  padding: 8px 15px;
   font-size: 15px;
   margin-right: 20%;
   font-family: Menlo, monospace;
   background-color: #809bd4;
   border-radius: 3px;
+  font-size: 1.2em;
 }
 
 .show_ticket {
