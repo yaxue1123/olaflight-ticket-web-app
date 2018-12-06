@@ -14,24 +14,24 @@ $(document).ready(() => {
 
   // ######################## P1 -> P2: search ###########################
   //listen to the click button
-  $('body').on('click', '.search-btn', function() {
-    let record = get_search_input();
-    //remove the current div
-    $(".title_div").children("#sub-banner").remove();
-    $(".search_div").remove();
-    $(".search_div").toggleClass("show_ticket");
-    $(".content_div").children().remove();
-    $("body").attr("id", "sub");
-    $(".title_div").children("#title-img").hide();
-    $(".title_div").append("<img id='sub-banner' src='./image/sub-banner.png' alt='sub-logo'>")
+  // $('body').on('click', '.search-btn', function () {
+  //   let record = get_search_input();
+  //   //remove the current div
+  //   $(".title_div").children("#sub-banner").remove();
+  //   $(".search_div").remove();
+  //   $(".search_div").toggleClass("show_ticket");
+  //   $(".content_div").children().remove();
+  //   $("body").attr("id", "sub");
+  //   $(".title_div").children("#title-img").hide();
+  //   $(".title_div").append("<img id='sub-banner' src='./image/sub-banner.png' alt='sub-logo'>")
 
-    //call to load a new mode
-    set_result_page(record);
-    datepicker_voke();
-  });
+  //   //call to load a new mode
+  //   set_result_page(record);
+  //   datepicker_voke();
+  // });
 
   // ##################### P2 -> P3: select + fill info ##################
-  $('body').on('click', '.checkout', function() {
+  $('body').on('click', '.checkout', function () {
     let record = get_search_input();
     let flight_id = $(this).attr("id");
     let div_to_change = $('.content_div');
@@ -107,9 +107,9 @@ $(document).ready(() => {
     customer_container.append('<span>seat</span><input id="seat-row" readonly="readonly"></input><input id="seat-number" readonly="readonly" ></input><br>');
 
     //listen to the seat selecting
-    $('body').on('click', '.seatChart-seat', function(e) {
+    $('body').on('click', '.seatChart-seat', function (e) {
       //clear the previous clicking
-      $('.seatChart-container .seatChart-seat').each(function() {
+      $('.seatChart-container .seatChart-seat').each(function () {
         if ($(this).hasClass("clicked") && !$(this).hasClass("legend-style")) {
           if ($(this)[0].innerHTML != e.currentTarget.innerHTML) {
             $(this).removeClass("clicked")
@@ -130,7 +130,7 @@ $(document).ready(() => {
   });
 
   // ###################### P3: create ticket ############################
-  $('body').on('click', '.order', function() {
+  $('body').on('click', '.order', function () {
     let flight_id = $('.flight-id').attr("id");
 
     // choose seat and create a seat object.
@@ -152,7 +152,7 @@ $(document).ready(() => {
   });
 
   // ###################### P4: view ticket ##############################
-  $('body').on('click', '.view-ticket', function() {
+  $('body').on('click', '.view-ticket', function () {
     let ticket_id = parseInt($(this).attr("id"));
     let body = $('body');
 
@@ -170,7 +170,7 @@ $(document).ready(() => {
       },
       success: (response) => {
         $('.ticket-container').append(show_ticket(response));
-        $('.ticket-container').append('<button id="tickect-to-search">Back to home</button>');
+        $('.ticket-container').append('<button id="back-home">Back to home</button>');
         $('.ticket-container').append('<div id="map-container"></div>');
       }
     });
@@ -178,13 +178,14 @@ $(document).ready(() => {
   });
 
   // ###################### P4 - P1: back to home #######################
-  $('body').on('click', '#tickect-to-search', function() {
+  $('body').on('click', '#test', function () {
     // TO DO. Don't reload and rerender.
-    location.reload();
+    // rebuild the home page.
+    build_home();
   });
 
   // ###################### P2: sort ##############################
-  $('body').on('click', '.sort', function() {
+  $('body').on('click', '.sort', function () {
     let info = {};
     info.depart_id = $("#depart").attr("airport-id");
     info.arrive_id = $("#arrive").attr("airport-id");
@@ -193,25 +194,22 @@ $(document).ready(() => {
   });
 
   // ###################### Every page: view trip ##############################
-  $('body').on('click', '#view_trip', function() {
-      //hide the current layout
-      let div_to_change = $('.content_div');
-      $('.title_div').children('#sub-banner, #view_trip').toggleClass('show_trips');
-      $('.search_div').toggleClass('show_trips');
-      $('.content_div').children().toggleClass('show_trips');
-      if($('.content_div').is('#select_seat')){
-        $('.content_div').attr('id','not_select');
-      }
-      //show the necessary
-      $(".title_div").append('<button id = "back_page">Back</button>');
-      $("body").attr("id", "ticket");
-      $('#title-img').css('display', 'block');
-      // $('.show_trips').toggleClass('show_trips');
-      $('.show_trips').toggle();
-      $('.content_div').append('<p class = "user_account">Hello, ' + credentials.username + '.');
-
-
-    // $('.back_page').toggle("display","block");
+  $('body').on('click', '#view_trip', function () {
+    //hide the current layout
+    let div_to_change = $('.content_div');
+    $('.title_div').children('#sub-banner, #view_trip').toggleClass('show_trips');
+    $('.search_div').toggleClass('show_trips');
+    $('.content_div').children().toggleClass('show_trips');
+    if ($('.content_div').is('#select_seat')) {
+      $('.content_div').attr('id', 'not_select');
+    }
+    //show the necessary
+    $(".title_div").append('<button id = "back_page">Back</button>');
+    $("body").attr("id", "ticket");
+    $('#title-img').css('display', 'block');
+    // $('.show_trips').toggleClass('show_trips');
+    $('.show_trips').toggle();
+    $('.content_div').append('<p class = "user_account">Hello, ' + credentials.username + '.');
 
     $.ajax({
       url: root_url + 'tickets/',
@@ -233,7 +231,7 @@ $(document).ready(() => {
     });
 
     //listen to the click of collapsible
-    $('body').on('click', '.collapsible', function(e) {
+    $('body').on('click', '.collapsible', function (e) {
       var get_div_by_id = '#' + e.currentTarget.id;
       $(get_div_by_id).toggleClass('active');
 
@@ -251,7 +249,7 @@ $(document).ready(() => {
   });
 
   // ###################### Every page: hide trip ##############################
-  $('body').on('click', '#back_page', function() {
+  $('body').on('click', '#back_page', function () {
     //delete current div
     $('.user_account').remove();
     $('.collapsible').remove();
@@ -265,10 +263,10 @@ $(document).ready(() => {
     if ($('.title_div').has('#sub-banner').length != 0) {
       console.log('subpage');
       $('body').attr('id', 'sub');
-      $('#title-img').css('display','none');
-      if($('.content_div').is('#not_select')){
+      $('#title-img').css('display', 'none');
+      if ($('.content_div').is('#not_select')) {
         console.log('grid');
-        $('.content_div').attr('id','select_seat');
+        $('.content_div').attr('id', 'select_seat');
       };
     } else {
       $('body').attr('id', 'hp');
@@ -276,7 +274,7 @@ $(document).ready(() => {
   });
 });
 
-var show_seat = function() {
+var show_seat = function () {
   // ###################### P3: show seat. ##############################
   // ###################### SO FAR STATIC. ##############################
   let map = {
@@ -293,12 +291,12 @@ var show_seat = function() {
     type: "regular",
     color: "#d46d36",
     price: ""
-  }, ];
+  },];
 
   return [map, types];
 }
 
-var show_one_flight = function(one_flight, input) {
+var show_one_flight = function (one_flight, input) {
   let c_div;
   let flight_info = {};
   if (input === "all") {
@@ -404,7 +402,7 @@ var show_one_flight = function(one_flight, input) {
 
 // show all results based on deaprture/ arrival airport.
 // additional criterial: sort by price or duration.
-var show_search_result = function(info, sort) {
+var show_search_result = function (info, sort) {
   $(".flight").remove();
   let div_to_append = $(".content_div");
   let depart_id = info['depart_id'];
@@ -430,7 +428,7 @@ var show_search_result = function(info, sort) {
       if (sort === "sort-price") {
         all_flights.sort((a, b) => (parseInt(a.info) > parseInt(b.info)) ? 1 : -1);
       } else if (sort === "sort-duration") {
-        all_flights.sort(function(a, b) {
+        all_flights.sort(function (a, b) {
           let duration_a = Math.abs(moment(a.departs_at) - moment(a.arrives_at));
           let duration_b = Math.abs(moment(b.departs_at) - moment(b.arrives_at));
           return duration_a > duration_b ? 1 : -1;
@@ -446,7 +444,7 @@ var show_search_result = function(info, sort) {
   });
 }
 
-var set_result_page = function(input) {
+var set_result_page = function (input) {
   //add search bar
   $(".title_div").after('<div class = "search_div"></div>');
   $(".search_div").append('<div class="group"><span>From</span>' +
@@ -473,11 +471,16 @@ var set_result_page = function(input) {
   show_search_result(input, "no sort");
 }
 
-var get_search_input = function() {
+var get_search_input = function () {
   //get the time data, airport data
   let date = $("#datepicker").datepicker('getDate');
-  let month = date.getMonth() + 1;
-  let day = date.getDate();
+  try {
+    let month = date.getMonth() + 1;
+    let day = date.getDate();
+  }
+  catch(err) {
+   // alert("Please pick a date :)")
+  }
   let select_date = [month, day];
   let depart_ap = $("#airport option[value='" + $("#depart").val() + "']").attr("id");
   let arrive_ap = $("#airport option[value='" + $("#arrive").val() + "']").attr("id");
@@ -492,11 +495,11 @@ var get_search_input = function() {
   };
 }
 
-var datepicker_voke = function() {
-  $("#datepicker").datepicker();
+var datepicker_voke = function () {
+    $("#datepicker").datepicker();
 }
 
-var airport_compelete = function() {
+var airport_compelete = function () {
   login();
   let air_list;
   //get json data
@@ -506,7 +509,7 @@ var airport_compelete = function() {
     xhrFields: {
       withCredentials: true
     },
-    success: function(response) {
+    success: function (response) {
       let air_array = response;
       air_list = "<datalist id='airport'>";
       for (let i = 0; i < air_array.length; i++) {
@@ -518,13 +521,13 @@ var airport_compelete = function() {
     }
   });
 
-  let create_airport_list = function(a_array) {
+  let create_airport_list = function (a_array) {
     let a_list = '<option id = "' + a_array.id + '" value = "' + a_array.code + ", " + a_array.city + ", " + a_array.state + '">';
     return a_list;
   }
 }
 
-var create_seat = function(plane_id, row, number) {
+var create_seat = function (plane_id, row, number) {
   $.ajax({
     url: root_url + 'seats',
     type: 'POST',
@@ -545,7 +548,7 @@ var create_seat = function(plane_id, row, number) {
   });
 }
 
-var create_ticket = function(response) {
+var create_ticket = function (response) {
   // create a ticket.
   // must wait seat create success.
   $.ajax({
@@ -575,7 +578,7 @@ var create_ticket = function(response) {
   });
 }
 
-var show_ticket = function(one_ticket) {
+var show_ticket = function (one_ticket) {
   let tdiv = $('<div class="ticket"></div>');
   let t_airline = $('<div class="ticket-airline"></div>');
   let t_flight = $('<div class="ticket-flight"></div>');
@@ -677,7 +680,7 @@ var show_ticket = function(one_ticket) {
   return tdiv;
 }
 
-var login = function() {
+var login = function () {
   $.ajax({
     url: root_url + 'sessions',
     type: 'POST',
@@ -693,11 +696,39 @@ var login = function() {
   });
 }
 
-var calculate_duration = function(departs_at, arrives_at) {
+var calculate_duration = function (departs_at, arrives_at) {
   // in millisecond.
   let duration = Math.abs(moment(departs_at) - moment(arrives_at));
   let hour = parseInt(duration / 3600000);
   let minute = Math.round((duration / 3600000 - hour) * 60);
 
   return hour + 'h' + minute + 'min';
+}
+
+var build_home = function () {
+  console.log("building");
+  let body = $('body');
+  body.empty();
+
+  body.attr('id', 'hp');
+
+  // rebuild home page.
+  let grid = $('<div class="grid"></div>');
+  let title = $('<div class="title_div" id="blank"></div>');
+  let content = $('<div class="content_div" id="blank"></div>');
+
+  title.append('<img id="title-img" src="./image/hp-logo.png" alt="hp-logo">');
+  title.append('<button id="view_trip">View My Trips</button>');
+
+  content.append('<div class="wrap" id="first-wrap"><span>' +
+    "I'm looking for a flight &nbsp " + '<i class="fas fa-plane"></i></span></div>');
+  content.append('<div class="wrap"><span>on</span><input type="text" id="datepicker"></div>');
+  content.append(' <div class="wrap"><span>from</span><input id="depart" type="text" list="airport" autocomplete=off>' +
+    '<span>to</span><input id="arrive" type="text" list="airport" autocomplete=off></div>');
+  content.append('<button class="search-btn" id="test">Find Flights</button>');
+
+  grid.append(title, content);
+  body.append(grid);
+
+  datepicker_voke();
 }
