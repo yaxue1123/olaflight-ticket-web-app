@@ -181,6 +181,7 @@ $(document).ready(() => {
     build_home();
   });
 
+
   // ###################### P2: sort ##############################
   $('body').on('click', '.sort', function () {
     let info = {};
@@ -490,7 +491,10 @@ var get_search_input = function () {
 }
 
 var datepicker_voke = function () {
-  $("#datepicker").datepicker();
+  let dateToday = new Date();
+  $("#datepicker").datepicker({
+    minDate: dateToday
+  });
 }
 
 var airport_compelete = function () {

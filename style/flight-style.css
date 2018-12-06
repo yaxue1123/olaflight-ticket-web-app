@@ -93,7 +93,7 @@ button {
   margin-bottom: 150px;
   font-family: athelas, serif;
   font-style: normal;
-  position: fixed;
+  position: absolute;
   margin-bottom: 50px;
   border: 1px solid #FFF;
   border-radius: 3px;
@@ -151,6 +151,7 @@ select {
 
 #arrive, #depart {
   font-size: 18px;
+  cursor: text;
 }
 
 #sub {
