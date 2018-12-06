@@ -731,4 +731,7 @@ var build_home = function () {
   body.append(grid);
 
   datepicker_voke();
+  //read all the airport info and generate the string of auto complete
+  airport_compelete();
+
 }
