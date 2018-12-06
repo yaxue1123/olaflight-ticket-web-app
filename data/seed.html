@@ -12,14 +12,6 @@
 
     <!-- JQuery -->
     <script src="https://code.jquery.com/jquery-3.2.1.min.js" crossorigin="anonymous"></script>
-    
-    <!--seed script-->
-    <!-- <script src="seed.js"></script> -->
-
-    <!--original json-->
-    <script src="airline.js"></script>
-    <script src="airport.js"></script>
-    <script src="plane.js"></script>
 
     <title>Database Seed Script</title>
   </head>
@@ -56,42 +48,71 @@
         };
         
         // ################ Airline #####################
-        // 806 airlines in total.
         // required: name. other: code as info.
-        let retrived_airlines = [];
-        for(let prop in all_airlines[0]){
-            let an_airline = {};
-            an_airline.name = all_airlines[0][prop]; // name.
-            an_airline.info = prop; // abbreviation.
-            retrived_airlines.push(an_airline);
-        }
-
-        // Airlines
-        const airlines = retrived_airlines;
+        const airlines = [
+            {
+                "name": "American Airline",
+                "logo_url": "image/AA.svg",
+            },
+            {
+                "name": "United Airlines",
+                "logo_url": "image/UA.svg",
+            }, 
+            {
+                "name": "JetBlue",
+                "logo_url": "image/B6.svg",
+            }
+        ];
 
         // ################ Airport #####################
-        // 3885 airports in total.
         // required: name, code. other: latitude, longtitude, city, state, country as info.
-        let retrived_airports = [];
-        for (let i = 0; i < all_airports.length; i++) {
-            let an_airport = {};
-            an_airport.name = all_airports[i].name;
-            an_airport.code = all_airports[i].code;
-            an_airport.latitude = String(all_airports[i].lat);
-            an_airport.longitude = String(all_airports[i].lon);
-            an_airport.city = all_airports[i].city;
-            an_airport.state = all_airports[i].state;
-            an_airport.info = all_airports[i].country;
-            retrived_airports.push(an_airport);
-        }
+        const airports =   [
+            {
+            "code": "RDU",
+            "latitude": "35.8729",
+            "longitude": "-78.7923",
+            "name": "Durham International Airport",
+            "city": "Raleigh\/Durham",
+            "state": "North Carolina",
+            "info": "United States"
+        },
+        {
+            "code": "JFK",
+            "latitude": "40.6437",
+            "longitude": "-73.79",
+            "name": "John F Kennedy International Airport",
+            "city": "Jamaica",
+            "state": "New York",
+            "info": "United States"
+        },
+        {
+            "code": "LGA",
+            "latitude": "40.7731",
+            "longitude": "-73.8756",
+            "name": "LaGuardia Airport",
+            "city": "Flushing",
+            "state": "New York",
+            "info": "United States"
+        },
+        {
+            "code": "EWR",
+            "latitude": "40.6924",
+            "longitude": "-74.1843",
+            "name": "Newark International Airport",
+            "city": "Newark",
+            "state": "New Jersey",
+            "info": "United States"
+        }];
 
-        const airports = retrived_airports;
+        // ################ Plane #####################
+        const planes = [
+            {
+                "name": "Airbus A310",
+                "seatmap_url": "image/United_Airlines_Airbus_A319_V1.svg"
+            }];
         
         // Flights
-        const flights = [
-            // fill with flights
-        ];
-        
+        const flights;
         
         // Instances
         const instances = [
@@ -115,19 +136,7 @@
         const tickets = [
             // fill with tickets
         ];
-        
-        
-        // ################ Plane #####################
-        // 174 planes in total.
-        let retrived_planes = [];
-        for (let i = 0; i < all_planes.length; i++) {
-        let a_plane = {};
-        a_plane.name = all_planes[i]["val0"];
-        retrived_planes.push(a_plane);
-        }
-
-        const planes = retrived_planes;
-        
+            
         /**
             * Just a simple mapping from pluralized resource names to singular
             *   resource names.
@@ -142,7 +151,6 @@
             tickets:     'ticket',
             planes:      'plane',
         };
-        
         
         /**
             * Logs in to the flights-api server.
