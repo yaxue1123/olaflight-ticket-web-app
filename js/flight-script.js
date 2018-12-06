@@ -14,7 +14,7 @@ $(document).ready(() => {
 
   // ######################## P1 -> P2: search ###########################
   //listen to the click button
-  $('body').on('click', '.search-btn', function () {
+  $('body').on('click', '.search-btn', function() {
     let record = get_search_input();
     //remove the current div
     $(".title_div").children("#sub-banner").remove();
@@ -31,7 +31,7 @@ $(document).ready(() => {
   });
 
   // ##################### P2 -> P3: select + fill info ##################
-  $('body').on('click', '.checkout', function () {
+  $('body').on('click', '.checkout', function() {
     let record = get_search_input();
     let flight_id = $(this).attr("id");
     let div_to_change = $('.content_div');
@@ -107,9 +107,9 @@ $(document).ready(() => {
     customer_container.append('<span>seat</span><input id="seat-row" readonly="readonly"></input><input id="seat-number" readonly="readonly" ></input><br>');
 
     //listen to the seat selecting
-    $('body').on('click', '.seatChart-seat', function (e) {
+    $('body').on('click', '.seatChart-seat', function(e) {
       //clear the previous clicking
-      $('.seatChart-container .seatChart-seat').each(function () {
+      $('.seatChart-container .seatChart-seat').each(function() {
         if ($(this).hasClass("clicked") && !$(this).hasClass("legend-style")) {
           if ($(this)[0].innerHTML != e.currentTarget.innerHTML) {
             $(this).removeClass("clicked")
@@ -130,7 +130,7 @@ $(document).ready(() => {
   });
 
   // ###################### P3: create ticket ############################
-  $('body').on('click', '.order', function () {
+  $('body').on('click', '.order', function() {
     let flight_id = $('.flight-id').attr("id");
 
     // choose seat and create a seat object.
@@ -152,7 +152,7 @@ $(document).ready(() => {
   });
 
   // ###################### P4: view ticket ##############################
-  $('body').on('click', '.view-ticket', function () {
+  $('body').on('click', '.view-ticket', function() {
     let ticket_id = parseInt($(this).attr("id"));
     let body = $('body');
 
@@ -178,13 +178,13 @@ $(document).ready(() => {
   });
 
   // ###################### P4 - P1: back to home #######################
-  $('body').on('click', '#tickect-to-search', function () {
+  $('body').on('click', '#tickect-to-search', function() {
     // TO DO. Don't reload and rerender.
     location.reload();
   });
 
   // ###################### P2: sort ##############################
-  $('body').on('click', '.sort', function () {
+  $('body').on('click', '.sort', function() {
     let info = {};
     info.depart_id = $("#depart").attr("airport-id");
     info.arrive_id = $("#arrive").attr("airport-id");
@@ -193,9 +193,21 @@ $(document).ready(() => {
   });
 
   // ###################### Every page: view trip ##############################
-  $('body').on('click', '#view_trip', function () {
-    let body = $('body');
-    body.empty();
+  $('body').on('click', '#view_trip', function() {
+      //hide the current layout
+      let div_to_change = $('.content_div');
+      $('.title_div').children('#sub-banner, #view_trip').toggleClass('show_trips');
+      $('.search_div').toggleClass('show_trips');
+      $('.content_div').children().toggleClass('show_trips');
+      //show the necessary
+      $(".title_div").append('<button id = "back_page">Back</button>');
+      $("body").attr("id", "ticket");
+      $('#title-img').css('display', 'block');
+      // $('.show_trips').toggleClass('show_trips');
+      $('.show_trips').toggle();
+      $('.content_div').append('<p class = "user_account">Hello, ' + credentials.username + '.');
+
+    // $('.back_page').toggle("display","block");
 
     $.ajax({
       url: root_url + 'tickets/',
@@ -206,22 +218,56 @@ $(document).ready(() => {
       success: (tickets) => {
         for (let prop in tickets) {
           if (tickets[prop].user_id === user_id) {
-            body.append("ticket number: " + tickets[prop].id);
-            body.append(show_ticket(tickets[prop]));
+            //here to add collapse;
+            div_to_change.append('<button class="collapsible" id = ' + tickets[prop].id + ' >Ticket number ' + tickets[prop].id + ' <i class="fas fa-caret-down"></i></button>');
+            // div_to_change.append("ticket number: " + tickets[prop].id);
+            div_to_change.append('<div class="ticket_content"></div>');
+            $(div_to_change).children('.ticket_content').append(show_ticket(tickets[prop]));
           }
         }
-      
+      }
+    });
+
+    //listen to the click of collapsible
+    $('body').on('click', '.collapsible', function(e) {
+      var get_div_by_id = '#' + e.currentTarget.id;
+      $(get_div_by_id).toggleClass('active');
+
+      let content = $(get_div_by_id).next();
+      console.log(content.css("max-height"));
+      if (content.height() == 0) {
+        content.css("max-height", content.children('.ticket').height());
+        $(get_div_by_id).children('.fa-w-10').removeClass('fa-caret-down').addClass('fa-caret-up');
+
+      } else {
+        content.css("max-height", "0px");
+        $(get_div_by_id).children('.fa-w-10').removeClass('fa-caret-up').addClass('fa-caret-down');
       }
     });
   });
 
+  // ###################### Every page: hide trip ##############################
+  $('body').on('click', '#back_page', function() {
+    //delete current div
+    $('.user_account').remove();
+    $('.collapsible').remove();
+    $('.ticket_content').remove();
+    $('#back_page').remove();
+
+    //toggle all the hidden page
+    $('.show_trips').toggle();
+    $('.show_trips').toggleClass('show_trips');
+    console.log($('.title_div').children().has('#sub-banner'));
+    if ($('.title_div').has('#sub-banner').length != 0) {
+      $('body').attr('id', 'sub');
+      $('#title-img').css('display','none');
+    } else {
+      $('body').attr('id', 'hp');
+    }
+  });
 });
 
-var build_home = function() {
-  
-}
-
-var show_seat = function () {
+var show_seat = function() {
   // ###################### P3: show seat. ##############################
   // ###################### SO FAR STATIC. ##############################
   let map = {
@@ -238,12 +284,12 @@ var show_seat = function () {
     type: "regular",
     color: "#d46d36",
     price: ""
-  },];
+  }, ];
 
   return [map, types];
 }
 
-var show_one_flight = function (one_flight, input) {
+var show_one_flight = function(one_flight, input) {
   let c_div;
   let flight_info = {};
   if (input === "all") {
@@ -349,8 +395,7 @@ var show_one_flight = function (one_flight, input) {
 
 // show all results based on deaprture/ arrival airport.
 // additional criterial: sort by price or duration.
-var show_search_result = function (info, sort) {
-  console.log(info);
+var show_search_result = function(info, sort) {
   $(".flight").remove();
   let div_to_append = $(".content_div");
   let depart_id = info['depart_id'];
@@ -366,8 +411,8 @@ var show_search_result = function (info, sort) {
       let all_flights = [];
       // get all results by depart id and arrival id (airport).
       for (let i = 0; i < response.length; i++) {
-        if (response[i].departure_id == parseInt(depart_id)
-          && response[i].arrival_id == parseInt(arrive_id)) {
+        if (response[i].departure_id == parseInt(depart_id) &&
+          response[i].arrival_id == parseInt(arrive_id)) {
           all_flights.push(response[i]);
         }
       }
@@ -376,7 +421,7 @@ var show_search_result = function (info, sort) {
       if (sort === "sort-price") {
         all_flights.sort((a, b) => (parseInt(a.info) > parseInt(b.info)) ? 1 : -1);
       } else if (sort === "sort-duration") {
-        all_flights.sort(function (a, b) {
+        all_flights.sort(function(a, b) {
           let duration_a = Math.abs(moment(a.departs_at) - moment(a.arrives_at));
           let duration_b = Math.abs(moment(b.departs_at) - moment(b.arrives_at));
           return duration_a > duration_b ? 1 : -1;
@@ -392,7 +437,7 @@ var show_search_result = function (info, sort) {
   });
 }
 
-var set_result_page = function (input) {
+var set_result_page = function(input) {
   //add search bar
   $(".title_div").after('<div class = "search_div"></div>');
   $(".search_div").append('<div class="group"><span>From</span>' +
@@ -419,7 +464,7 @@ var set_result_page = function (input) {
   show_search_result(input, "no sort");
 }
 
-var get_search_input = function () {
+var get_search_input = function() {
   //get the time data, airport data
   let date = $("#datepicker").datepicker('getDate');
   let month = date.getMonth() + 1;
@@ -438,11 +483,11 @@ var get_search_input = function () {
   };
 }
 
-var datepicker_voke = function () {
+var datepicker_voke = function() {
   $("#datepicker").datepicker();
 }
 
-var airport_compelete = function () {
+var airport_compelete = function() {
   login();
   let air_list;
   //get json data
@@ -452,7 +497,7 @@ var airport_compelete = function () {
     xhrFields: {
       withCredentials: true
     },
-    success: function (response) {
+    success: function(response) {
       let air_array = response;
       air_list = "<datalist id='airport'>";
       for (let i = 0; i < air_array.length; i++) {
@@ -464,13 +509,13 @@ var airport_compelete = function () {
     }
   });
 
-  let create_airport_list = function (a_array) {
+  let create_airport_list = function(a_array) {
     let a_list = '<option id = "' + a_array.id + '" value = "' + a_array.code + ", " + a_array.city + ", " + a_array.state + '">';
     return a_list;
   }
 }
 
-var create_seat = function (plane_id, row, number) {
+var create_seat = function(plane_id, row, number) {
   $.ajax({
     url: root_url + 'seats',
     type: 'POST',
@@ -491,7 +536,7 @@ var create_seat = function (plane_id, row, number) {
   });
 }
 
-var create_ticket = function (response) {
+var create_ticket = function(response) {
   // create a ticket.
   // must wait seat create success.
   $.ajax({
@@ -521,7 +566,7 @@ var create_ticket = function (response) {
   });
 }
 
-var show_ticket = function (one_ticket) {
+var show_ticket = function(one_ticket) {
   let tdiv = $('<div class="ticket"></div>');
   let t_airline = $('<div class="ticket-airline"></div>');
   let t_flight = $('<div class="ticket-flight"></div>');
@@ -541,7 +586,9 @@ var show_ticket = function (one_ticket) {
   $.ajax({
     url: root_url + 'seats/' + one_ticket.seat_id,
     type: 'GET',
-    xhrFields: { withCredentials: true },
+    xhrFields: {
+      withCredentials: true
+    },
     success: (seat) => {
       t_seat.append('Seat: ' + seat.row + seat.number);
     }
@@ -551,7 +598,9 @@ var show_ticket = function (one_ticket) {
   $.ajax({
     url: root_url + 'instances/' + one_ticket.instance_id,
     type: 'GET',
-    xhrFields: { withCredentials: true },
+    xhrFields: {
+      withCredentials: true
+    },
     success: (instance) => {
       // date.
       t_date.append('Depart at ' + instance.date);
@@ -559,7 +608,9 @@ var show_ticket = function (one_ticket) {
       $.ajax({
         url: root_url + 'flights/' + instance.flight_id,
         type: 'GET',
-        xhrFields: { withCredentials: true },
+        xhrFields: {
+          withCredentials: true
+        },
         success: (flight) => {
           // flight info.
           t_flight.append(flight.number + '<br>');
@@ -617,7 +668,7 @@ var show_ticket = function (one_ticket) {
   return tdiv;
 }
 
-var login = function () {
+var login = function() {
   $.ajax({
     url: root_url + 'sessions',
     type: 'POST',
@@ -633,7 +684,7 @@ var login = function () {
   });
 }
 
-var calculate_duration = function (departs_at, arrives_at) {
+var calculate_duration = function(departs_at, arrives_at) {
   // in millisecond.
   let duration = Math.abs(moment(departs_at) - moment(arrives_at));
   let hour = parseInt(duration / 3600000);
@@ -641,5 +692,3 @@ var calculate_duration = function (departs_at, arrives_at) {
 
   return hour + 'h' + minute + 'min';
 }
-
-
